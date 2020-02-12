@@ -1,9 +1,6 @@
-__author__ = 'zhengwang'
-
 import numpy as np
 import cv2
 import socket
-
 
 class VideoStreamingTest(object):
     def __init__(self, host, port):
@@ -42,7 +39,6 @@ class VideoStreamingTest(object):
         finally:
             self.connection.close()
             self.server_socket.close()
-
 
 if __name__ == '__main__':
     # host, port

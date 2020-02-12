@@ -1,8 +1,5 @@
-__author__ = 'zhengwang'
-
 import socket
 import time
-
 
 class SensorStreamingTest(object):
     def __init__(self, host, port):
@@ -36,5 +33,5 @@ class SensorStreamingTest(object):
 
 
 if __name__ == '__main__':
-    h, p = "192.168.1.100", 8002
+    h, p = "192.168.0.114", 8002
     SensorStreamingTest(h, p)
