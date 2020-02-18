@@ -64,13 +64,17 @@ class CollectTrainingData(object):
                     
                     # select lower half of the image
                     height, width = image.shape
+                    
                     roi = image[int(height/2):height, :]
 
                     cv2.imshow('image', image)
 
                     # reshape the roi image into a vector
                     temp_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
-                    X=roi.reshape(1, int(height/2) * width).astype(np.float32)
+                    
+                    #X=roi.reshape(1, int(height/2) * width).astype(np.float32)
+                    #print(temp_array.shape)
+                    #print(X.shape)
                     
                     frame += 1
                     total_frame += 1
@@ -115,7 +119,7 @@ class CollectTrainingData(object):
                             elif key_input[pygame.K_UP]:
                                 print("Forward")
                                 saved_frame += 1
-                                X = np.column_stack((X, temp_array))
+                                X = np.vstack((X, temp_array))
                                 y = np.vstack((y, self.k[2]))
                                 #self.ser.write(chr(1).encode())
                                 wiringpi.digitalWrite(21, 0)
@@ -214,7 +218,7 @@ if __name__ == '__main__':
     #sp = "/dev/tty.usbmodem1421"
 
     # vector size, half of the image
-    s = 120 * 320
+    s = 43200
 
     ctd = CollectTrainingData(h, p, s)
     ctd.collect()

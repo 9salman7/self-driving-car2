@@ -75,7 +75,7 @@ class RCTest(object):
                         wiringpi.digitalWrite(23, 0)
                         wiringpi.digitalWrite(24, 0)
                         
-                    elif key_input[pygame.K_s]:
+                    elif key_input[pygame.K_s] or key_input[pygame.K_SPACE]:
                         print("Stop")
                         wiringpi.digitalWrite(21, 0)
                         wiringpi.digitalWrite(22, 0)
