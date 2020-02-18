@@ -1,3 +1,8 @@
+#include<LiquidCrystal.h>
+
+const int rs = 12, en = 11, d4 = A5, d5 = A4, d6 = A3, d7 = A2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
 const int EnableL = 5;
 const int HighL = 6;       // LEFT SIDE MOTOR
 const int LowL =7;
@@ -28,17 +33,20 @@ void setup() {
 	pinMode(D1, INPUT_PULLUP);
 	pinMode(D2, INPUT_PULLUP);
 	pinMode(D3, INPUT_PULLUP);
+
+  lcd.begin(16, 2);
+
 }
 
 void forward()
 {
 	digitalWrite(HighL, HIGH);
 	digitalWrite(LowL, LOW);
-	analogWrite(EnableL,255);
+	analogWrite(EnableL,190);
 
 	digitalWrite(HighR, HIGH);
 	digitalWrite(LowR, LOW);
-	analogWrite(EnableR,255);
+	analogWrite(EnableR,190);
  // delay(time);
 }
 
@@ -54,7 +62,7 @@ void backward()
 	//delay(time);
 }
 
-void stop()
+void Stop()
 {
 	digitalWrite(HighL, HIGH);
 	digitalWrite(LowL, LOW);
@@ -69,11 +77,11 @@ void forwardLeft()
 {
 	digitalWrite(HighL, HIGH);
 	digitalWrite(LowL, LOW);
-	analogWrite(EnableL,90);
+	analogWrite(EnableL,190);
 
 	digitalWrite(HighR, HIGH);
 	digitalWrite(LowR, LOW);
-	analogWrite(EnableR,255);
+	analogWrite(EnableR,65);
 	//delay(time);
 }
 
@@ -81,11 +89,11 @@ void left()
 {
 	digitalWrite(HighL, HIGH);
 	digitalWrite(LowL, LOW);
-	analogWrite(EnableL,50);
+	analogWrite(EnableL,255);
 
 	digitalWrite(HighR, HIGH);
 	digitalWrite(LowR, LOW);
-	analogWrite(EnableR,255);
+	analogWrite(EnableR,0);
 	//delay(time);
 }
 
@@ -93,11 +101,11 @@ void forwardRight()
 {
 	digitalWrite(HighL, HIGH);
 	digitalWrite(LowL, LOW);
-	analogWrite(EnableL,255);
+	analogWrite(EnableL,90);
 
 	digitalWrite(HighR, HIGH);
 	digitalWrite(LowR, LOW);
-	analogWrite(EnableR,90);   
+	analogWrite(EnableR,255);   
 	//delay(time);
 }
 
@@ -105,11 +113,11 @@ void right()
 {
 	digitalWrite(HighL, HIGH);
 	digitalWrite(LowL, LOW);
-	analogWrite(EnableL,255);
+	analogWrite(EnableL,0);
 
 	digitalWrite(HighR, HIGH);
 	digitalWrite(LowR, LOW);
-	analogWrite(EnableR,50);
+	analogWrite(EnableR,255);
 	//delay(time);   
 }
 
@@ -125,13 +133,27 @@ void getData()
 void loop(){
 	getData();
 	switch(data){
-		case 1: forward(); break;
-		case 2: backward(); break;
-		case 3: right(); break;
-		case 4: left(); break;
-		case 5: forwardRight(); break;
-		case 6: forwardLeft(); break;
-		case 0: Stop(); break;
+		case 1: forward(); 
+		        lcd.print("Frwd");
+		        break;
+		case 2: backward();
+            lcd.print("Rvrse");
+		        break;
+		case 3: right();
+            lcd.print("Right");
+		        break;
+		case 4: left();
+            lcd.print("Left");
+		        break;
+		case 5: forwardRight();
+            lcd.print("FRight");
+            break;
+		case 6: forwardLeft(); 
+            lcd.print("FLeft");
+		        break;
+		default: Stop();
+            lcd.print("Stop");
+		        break;
 		
 	}
 }
