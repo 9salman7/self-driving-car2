@@ -8,7 +8,7 @@ from pygame.locals import *
 import socket
 import time
 import os
-
+import wiringpi
 
 class CollectTrainingData(object):
     
@@ -70,6 +70,7 @@ class CollectTrainingData(object):
 
                     # reshape the roi image into a vector
                     temp_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
+                    X=roi.reshape(1, int(height/2) * width).astype(np.float32)
                     
                     frame += 1
                     total_frame += 1
@@ -114,7 +115,7 @@ class CollectTrainingData(object):
                             elif key_input[pygame.K_UP]:
                                 print("Forward")
                                 saved_frame += 1
-                                X = np.vstack((X, temp_array))
+                                X = np.column_stack((X, temp_array))
                                 y = np.vstack((y, self.k[2]))
                                 #self.ser.write(chr(1).encode())
                                 wiringpi.digitalWrite(21, 0)
@@ -201,8 +202,13 @@ class CollectTrainingData(object):
 
 
 if __name__ == '__main__':
+    wiringpi.wiringPiSetup()
+    wiringpi.pinMode(21, 1) 
+    wiringpi.pinMode(22, 1)
+    wiringpi.pinMode(23, 1)
+    wiringpi.pinMode(24, 1) 
     # host, port
-    h, p = "169.254.43.60", 8001
+    h, p = "192.168.0.106", 8000
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
