@@ -34,6 +34,8 @@ class CollectTrainingData(object):
 
         pygame.init()
         pygame.display.set_mode((250, 250))
+        
+        pygame.display.update()
 
     def collect(self):
 
@@ -212,7 +214,7 @@ if __name__ == '__main__':
     wiringpi.pinMode(23, 1)
     wiringpi.pinMode(24, 1) 
     # host, port
-    h, p = "192.168.0.106", 8000
+    h, p = "192.168.0.103", 8000
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
