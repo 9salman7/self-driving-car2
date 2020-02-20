@@ -40,13 +40,13 @@ class RCDriverNNOnly(object):
 
                     # lower half of the image
                     height, width = gray.shape
-                    roi = gray[int(height/2):height, :]
+                    roi = gray
 
                     cv2.imshow('image', image)
                     # cv2.imshow('mlp_image', roi)
 
                     # reshape image
-                    image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
+                    image_array = roi.reshape(1, int(height) * width).astype(np.float32)
 
                     # neural network makes prediction
                     prediction = self.nn.predict(image_array)

@@ -1,6 +1,9 @@
 import pygame
 from pygame.locals import *
 import wiringpi
+import RPi.GPIO as GPIO
+
+
 
 class RCTest(object):
 
@@ -55,13 +58,20 @@ class RCTest(object):
                         wiringpi.digitalWrite(22, 0)
                         wiringpi.digitalWrite(23, 0)
                         wiringpi.digitalWrite(24, 1)
-
+                        GPIO.output(8, GPIO.LOW) # Turn on
+                        GPIO.output(7, GPIO.LOW) # Turn on
+                        GPIO.output(4, GPIO.LOW)
+                                                
                     elif key_input[pygame.K_DOWN]:
                         print("Reverse")
                         wiringpi.digitalWrite(21, 0)
                         wiringpi.digitalWrite(22, 0)
                         wiringpi.digitalWrite(23, 1)
                         wiringpi.digitalWrite(24, 0)
+                        
+                        GPIO.output(8, GPIO.HIGH) # Turn on
+                        GPIO.output(7, GPIO.HIGH) # Turn on
+                        GPIO.output(4, GPIO.LOW)
 
                     elif key_input[pygame.K_RIGHT]:
                         print("Right")
@@ -69,6 +79,10 @@ class RCTest(object):
                         wiringpi.digitalWrite(22, 0)
                         wiringpi.digitalWrite(23, 1)
                         wiringpi.digitalWrite(24, 1)
+                        
+                        GPIO.output(8, GPIO.LOW) # Turn on
+                        GPIO.output(7, GPIO.HIGH) # Turn on
+                        GPIO.output(4, GPIO.LOW)
 
                     elif key_input[pygame.K_LEFT]:
                         print("Left")
@@ -77,6 +91,10 @@ class RCTest(object):
                         wiringpi.digitalWrite(23, 0)
                         wiringpi.digitalWrite(24, 0)
                         
+                        GPIO.output(8, GPIO.HIGH) # Turn on
+                        GPIO.output(7, GPIO.LOW) # Turn on
+                        GPIO.output(4, GPIO.LOW)
+                        
                     elif key_input[pygame.K_s] or key_input[pygame.K_SPACE]:
                         print("Stop")
                         wiringpi.digitalWrite(21, 0)
@@ -84,9 +102,20 @@ class RCTest(object):
                         wiringpi.digitalWrite(23, 0)
                         wiringpi.digitalWrite(24, 0)
                     
+                        GPIO.output(8, GPIO.LOW) # Turn on
+                        GPIO.output(7, GPIO.LOW) # Turn on
+                        GPIO.output(4, GPIO.HIGH)                    
                     # exit
                     elif key_input[pygame.K_x] or key_input[pygame.K_q]:
                         print("Exit")
+                        wiringpi.digitalWrite(21, 0)
+                        wiringpi.digitalWrite(22, 1)
+                        wiringpi.digitalWrite(23, 1)
+                        wiringpi.digitalWrite(24, 1)
+                        
+                        GPIO.output(8, GPIO.LOW) # Turn on
+                        GPIO.output(7, GPIO.LOW) # Turn on
+                        GPIO.output(4, GPIO.LOW) 
                         self.send_inst = False
                         break
 
@@ -99,5 +128,12 @@ if __name__ == '__main__':
     wiringpi.pinMode(21, 1) 
     wiringpi.pinMode(22, 1)
     wiringpi.pinMode(23, 1)
-    wiringpi.pinMode(24, 1) 
+    wiringpi.pinMode(24, 1)
+    
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(8, GPIO.OUT, initial= GPIO.LOW)  #left
+    GPIO.setup(4, GPIO.OUT, initial= GPIO.LOW)  #red
+    GPIO.setup(7, GPIO.OUT, initial= GPIO.LOW)  #right
+    
     RCTest()

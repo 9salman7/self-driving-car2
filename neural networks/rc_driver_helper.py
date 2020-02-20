@@ -4,17 +4,23 @@ import serial
 import cv2
 import math
 import wiringpi
+import RPi.GPIO as GPIO
 
 
 class RCControl(object):
 
     def __init__(self):
-            wiringpi.wiringPiSetup()
-            wiringpi.pinMode(21, 1) 
-            wiringpi.pinMode(22, 1)
-            wiringpi.pinMode(23, 1)
-            wiringpi.pinMode(24, 1) 
-            #sef.serial_port = serial.Serial(serial_port, 115200, timeout=1)
+        wiringpi.wiringPiSetup()
+        wiringpi.pinMode(21, 1) 
+        wiringpi.pinMode(22, 1)
+        wiringpi.pinMode(23, 1)
+        wiringpi.pinMode(24, 1)
+        
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(8, GPIO.OUT, initial= GPIO.LOW)  #left
+        GPIO.setup(4, GPIO.OUT, initial= GPIO.LOW)  #red
+        GPIO.setup(7, GPIO.OUT, initial= GPIO.LOW)  #right
 
     def steer(self, prediction):
         if prediction == 2:
@@ -24,6 +30,10 @@ class RCControl(object):
             wiringpi.digitalWrite(22, 0)
             wiringpi.digitalWrite(23, 0)
             wiringpi.digitalWrite(24, 1)
+            
+            GPIO.output(8, GPIO.LOW) # Turn on
+            GPIO.output(7, GPIO.LOW) # Turn on
+            GPIO.output(4, GPIO.LOW)
 
         elif prediction == 0:
             #self.serial_port.write(chr(7).encode())
@@ -31,8 +41,12 @@ class RCControl(object):
             wiringpi.digitalWrite(21, 0)
             wiringpi.digitalWrite(22, 1)
             wiringpi.digitalWrite(23, 0)
-            wiringpi.digitalWrite(24, 0)
-            
+            wiringpi.digitalWrite(24, 0)\
+                                      
+            GPIO.output(8, GPIO.HIGH) # Turn on
+            GPIO.output(7, GPIO.LOW) # Turn on
+            GPIO.output(4, GPIO.LOW)
+
         elif prediction == 1:
             #self.serial_port.write(chr(6).encode())
             print("Right")
@@ -40,6 +54,11 @@ class RCControl(object):
             wiringpi.digitalWrite(22, 0)
             wiringpi.digitalWrite(23, 1)
             wiringpi.digitalWrite(24, 1)
+            
+            GPIO.output(8, GPIO.LOW) # Turn on
+            GPIO.output(7, GPIO.HIGH) # Turn on
+            GPIO.output(4, GPIO.LOW)
+
         else:
             self.stop()
             print("Stop")
@@ -48,6 +67,11 @@ class RCControl(object):
             wiringpi.digitalWrite(23, 0)
             wiringpi.digitalWrite(24, 0)
 
+            GPIO.output(8, GPIO.LOW) # Turn on
+            GPIO.output(7, GPIO.LOW) # Turn on
+            GPIO.output(4, GPIO.HIGH)
+
+
     def stop(self):
         #self.serial_port.write(chr(0).encode())
         print("Stop")
@@ -55,6 +79,11 @@ class RCControl(object):
         wiringpi.digitalWrite(22, 0)
         wiringpi.digitalWrite(23, 0)
         wiringpi.digitalWrite(24, 0)
+
+        GPIO.output(8, GPIO.LOW) # Turn on
+        GPIO.output(7, GPIO.LOW) # Turn on
+        GPIO.output(4, GPIO.HIGH)
+
 
 
 class DistanceToCamera(object):

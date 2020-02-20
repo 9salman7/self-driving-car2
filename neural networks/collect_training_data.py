@@ -9,6 +9,7 @@ import socket
 import time
 import os
 import wiringpi
+import RPi.GPIO as GPIO
 
 class CollectTrainingData(object):
     
@@ -128,6 +129,10 @@ class CollectTrainingData(object):
                                 wiringpi.digitalWrite(22, 0)
                                 wiringpi.digitalWrite(23, 0)
                                 wiringpi.digitalWrite(24, 1)
+                                
+                                GPIO.output(8, GPIO.LOW) # Turn on
+                                GPIO.output(7, GPIO.LOW) # Turn on
+                                GPIO.output(4, GPIO.LOW)
 
                             elif key_input[pygame.K_DOWN]:
                                 print("Reverse")
@@ -136,6 +141,10 @@ class CollectTrainingData(object):
                                 wiringpi.digitalWrite(22, 0)
                                 wiringpi.digitalWrite(23, 1)
                                 wiringpi.digitalWrite(24, 0)
+                                    
+                                GPIO.output(8, GPIO.HIGH) # Turn on
+                                GPIO.output(7, GPIO.HIGH) # Turn on
+                                GPIO.output(4, GPIO.LOW)
 
                             elif key_input[pygame.K_RIGHT]:
                                 print("Right")
@@ -147,6 +156,10 @@ class CollectTrainingData(object):
                                 wiringpi.digitalWrite(22, 0)
                                 wiringpi.digitalWrite(23, 1)
                                 wiringpi.digitalWrite(24, 1)
+                                
+                                GPIO.output(8, GPIO.LOW) # Turn on
+                                GPIO.output(7, GPIO.HIGH) # Turn on
+                                GPIO.output(4, GPIO.LOW)
 
                             elif key_input[pygame.K_LEFT]:
                                 print("Left")
@@ -158,6 +171,10 @@ class CollectTrainingData(object):
                                 wiringpi.digitalWrite(22, 1)
                                 wiringpi.digitalWrite(23, 0)
                                 wiringpi.digitalWrite(24, 0)
+                            
+                                GPIO.output(8, GPIO.HIGH) # Turn on
+                                GPIO.output(7, GPIO.LOW) # Turn on
+                                GPIO.output(4, GPIO.LOW)
                                 
                             elif key_input[pygame.K_s]:
                                 print("Stop")
@@ -166,9 +183,16 @@ class CollectTrainingData(object):
                                 wiringpi.digitalWrite(22, 0)
                                 wiringpi.digitalWrite(23, 0)
                                 wiringpi.digitalWrite(24, 0)
+                                
+                                GPIO.output(8, GPIO.LOW) # Turn on
+                                GPIO.output(7, GPIO.LOW) # Turn on
+                                GPIO.output(4, GPIO.HIGH)
 
                             elif key_input[pygame.K_x] or key_input[pygame.K_q]:
                                 print("exit")
+                                GPIO.output(8, GPIO.LOW) # Turn on
+                                GPIO.output(7, GPIO.LOW) # Turn on
+                                GPIO.output(4, GPIO.LOW)
                                 self.send_inst = False
                                 #self.ser.write(chr(0).encode())
                                 #self.ser.close()
@@ -212,7 +236,13 @@ if __name__ == '__main__':
     wiringpi.pinMode(21, 1) 
     wiringpi.pinMode(22, 1)
     wiringpi.pinMode(23, 1)
-    wiringpi.pinMode(24, 1) 
+    wiringpi.pinMode(24, 1)
+    
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(8, GPIO.OUT, initial= GPIO.LOW)  #left
+    GPIO.setup(4, GPIO.OUT, initial= GPIO.LOW)  #red
+    GPIO.setup(7, GPIO.OUT, initial= GPIO.LOW)
     # host, port
     h, p = "192.168.0.103", 8000
 
