@@ -55,7 +55,8 @@ def load_data(input_size, path):
 
 class NeuralNetwork(object):
     def __init__(self):
-        self.model = None
+        #self.model = None
+        self.model = load_model('model_test.h5')
 
     def create(self, layer_sizes):
         # create neural network
@@ -94,8 +95,9 @@ class NeuralNetwork(object):
         if not os.path.exists(path):
             print("Model does not exist, exit")
             sys.exit()
-        self.model = cv2.ml.ANN_MLP_load(path)
-        
+        #self.model = cv2.ml.ANN_MLP_load(path)
+        self.model = cv2.dnn.readNetFromTensorflow("tf_model.pb")
+
     def load_modelKeras(self,path):
         if not os.path.exists(path):
             print("Model does not exist, exit")
@@ -112,7 +114,7 @@ class NeuralNetwork(object):
         return resp.argmax(-1)
     
     def predictKeras(self, X):
-        model = load_model('model_test.h5')
+        #model = load_model('model_test.h5')
         X = X.reshape(X.shape[0], 120, 360, 1)
         y_pred = model.predict_classes(X)
         #y_true = np.argmax(y_test, -1)
