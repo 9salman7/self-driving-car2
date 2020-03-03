@@ -95,8 +95,8 @@ class NeuralNetwork(object):
         if not os.path.exists(path):
             print("Model does not exist, exit")
             sys.exit()
-        #self.model = cv2.ml.ANN_MLP_load(path)
-        self.model = cv2.dnn.readNetFromTensorflow("tf_model.pb")
+        self.model = cv2.ml.ANN_MLP_load(path)
+        #self.model = cv2.dnn.readNetFromTensorflow("tf_model.pb")
 
     def load_modelKeras(self,path):
         if not os.path.exists(path):

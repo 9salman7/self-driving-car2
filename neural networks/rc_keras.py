@@ -19,8 +19,8 @@ class RCDriverNNOnly(object):
         # load trained neural network
         self.nn = NeuralNetwork()
         #self.nn.model = load_modelKeras('model_test.h5')
-        #self.nn.load_modelKeras("model_test.h5")
-        self.nn.load_model("tf_model.pb")
+        self.nn.load_modelKeras("model_test.h5")
+        #self.nn.load_model("tf_model.pb")
         self.rc_car = RCControl()
 
     def drive(self):
@@ -49,8 +49,8 @@ class RCDriverNNOnly(object):
                     image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
                     
                     # neural network makes prediction
-                    #prediction = self.nn.predictKeras(image_array)
-                    prediction = self.nn.predict(image_array)
+                    prediction = self.nn.predictKeras(image_array)
+                    #prediction = self.nn.predict(image_array)
                     
                     self.rc_car.steer(prediction)
 
