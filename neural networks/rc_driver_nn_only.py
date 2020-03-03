@@ -64,13 +64,13 @@ class RCDriverNNOnly(object):
 
 if __name__ == '__main__':
     # host, port
-    h, p = "192.168.0.103", 8000
+    h, p = "192.168.0.105", 1234
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
 
     # model path
-    path = "saved_model/nn_model.xml"
+    path = "model_test.h5"
 
     rc = RCDriverNNOnly(h, p, path)
     rc.drive()

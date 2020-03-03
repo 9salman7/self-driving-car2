@@ -8,6 +8,16 @@ import time
 import os
 from sklearn.model_selection import train_test_split
 
+import random
+import collections
+
+import tensorflow as tf
+import keras
+from keras.callbacks import ModelCheckpoint
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Flatten, Dense, Dropout, Lambda
+from keras.models import load_model
 
 def load_data(input_size, path):
     print("Loading training data...")
@@ -85,6 +95,13 @@ class NeuralNetwork(object):
             print("Model does not exist, exit")
             sys.exit()
         self.model = cv2.ml.ANN_MLP_load(path)
+        
+    def load_modelKeras(self,path):
+        if not os.path.exists(path):
+            print("Model does not exist, exit")
+            sys.exit()
+        self.modelKeras = load_model('model_test.h5')
+       # print("model loaded")
 
     def predict(self, X):
         resp = None
@@ -93,3 +110,10 @@ class NeuralNetwork(object):
         except Exception as e:
             print(e)
         return resp.argmax(-1)
+    
+    def predictKeras(self, X):
+        model = load_model('model_test.h5')
+        X = X.reshape(X.shape[0], 120, 360, 1)
+        y_pred = model.predict_classes(X)
+        #y_true = np.argmax(y_test, -1)
+        return y_pred

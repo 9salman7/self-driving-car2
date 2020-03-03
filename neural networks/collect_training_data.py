@@ -18,7 +18,7 @@ class CollectTrainingData(object):
         self.server_socket = socket.socket()
         self.server_socket.bind((host, port))
         self.server_socket.listen(0)
-
+    
         # accept a single connection
         self.connection = self.server_socket.accept()[0].makefile('rb')
 
@@ -244,7 +244,7 @@ if __name__ == '__main__':
     GPIO.setup(4, GPIO.OUT, initial= GPIO.LOW)  #red
     GPIO.setup(7, GPIO.OUT, initial= GPIO.LOW)
     # host, port
-    h, p = "192.168.0.103", 8000
+    h, p = "192.168.0.105", 1234
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
