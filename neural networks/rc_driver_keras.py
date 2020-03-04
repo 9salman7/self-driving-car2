@@ -102,7 +102,7 @@ class RCControl(object):
 
 if __name__ == '__main__':
     rc=RCControl()
-    steer()
+    rc.steer()
 
 
 
