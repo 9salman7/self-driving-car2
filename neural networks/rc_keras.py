@@ -70,7 +70,7 @@ class RCDriverNNOnly(object):
             self.connection.close()
             self.server_socket.close()
 
-    def sendPrediction(pred):
+    def sendPrediction(self, pred):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
