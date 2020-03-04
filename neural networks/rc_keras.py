@@ -14,8 +14,13 @@ class RCDriverNNOnly(object):
         self.server_socket.bind((host, port))
         self.server_socket.listen(0)
 
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('192.168.0.112', 1234))
+        connection2 = client_socket.makefile('wb')
+
         # accept a single connection
         self.connection = self.server_socket.accept()[0].makefile('rb')
+        #self.connection2= self.server_socket.makefile('wb')
 
         # load trained neural network
         self.nn = NeuralNetwork()
@@ -54,7 +59,7 @@ class RCDriverNNOnly(object):
                     #prediction = self.nn.predict(image_array)
 
                     #pred = self.connection.write(prediction)
-                    self.sendPrediction()
+                    self.sendPrediction(prediction)
                     #elf.rc_car.steer(prediction)
 
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -68,13 +73,13 @@ class RCDriverNNOnly(object):
 
     def sendPrediction():
         while True:
-            pred = self.connection.write(prediction)
+            pred = self.connection2.write(bytes(str(prediction), 'utf8'))
 
 
 
 if __name__ == '__main__':
     # host, port
-    h, p = "192.168.0.105", 1234
+    h, p = "192.168.0.112", 1234
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
