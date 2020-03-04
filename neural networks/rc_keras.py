@@ -27,6 +27,7 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
+        print("drive called")
         stream_bytes = b' '
         try:
             # stream video frames one by one
