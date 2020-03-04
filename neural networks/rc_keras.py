@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import socket
 from model import NeuralNetwork
-from rc_driver_helper import RCControl
+from threading import Thread
 
 class RCDriverNNOnly(object):
 
@@ -80,8 +80,9 @@ if __name__ == '__main__':
 
     # model path
     path = "model_test.h5"
-    Thread(target=sendPrediction).start()
+  
 
     rc = RCDriverNNOnly(h, p, path)
+    Thread(target=rc.sendPrediction()).start()
     rc.drive()
 
