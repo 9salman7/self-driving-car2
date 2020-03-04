@@ -46,7 +46,7 @@ class RCDriverNNOnly(object):
                     # lower half of the image
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
-
+                    print("image loaded")
                     cv2.imshow('image', image)
                     # cv2.imshow('mlp_image', roi)
 
