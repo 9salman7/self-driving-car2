@@ -89,8 +89,10 @@ if __name__ == '__main__':
     # model path
     path = "model_test.h5"
   
-
+  
     rc = RCDriverNNOnly(h, p, path)
-    Thread(target=rc.sendPrediction()).start()
     rc.drive()
+    Thread(target=rc.sendPrediction()).start()
+    print("hello")
+    #rc.drive()
 
