@@ -89,6 +89,6 @@ if __name__ == '__main__':
   
 
     rc = RCDriverNNOnly(h, p, path)
-    Thread(target=rc.sendPrediction()).start()
+    Thread(target=rc.sendPrediction(0)).start()
     rc.drive()
 
