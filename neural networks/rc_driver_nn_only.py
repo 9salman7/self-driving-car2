@@ -50,8 +50,9 @@ class RCDriverNNOnly(object):
 
                     # neural network makes prediction
                     prediction = self.nn.predict(image_array)
+                    
                     self.rc_car.steer(prediction)
-
+                            
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
                         self.rc_car.stop()
@@ -70,7 +71,7 @@ if __name__ == '__main__':
     #sp = "/dev/tty.usbmodem1421"
 
     # model path
-    path = "model_test.h5"
+    path = "/saved_model/nn_model/xml"
 
     rc = RCDriverNNOnly(h, p, path)
     rc.drive()

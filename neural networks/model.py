@@ -55,8 +55,8 @@ def load_data(input_size, path):
 
 class NeuralNetwork(object):
     def __init__(self):
-        #self.model = None
-        self.model = load_model('model_test.h5')
+        self.model = None
+        
 
     def create(self, layer_sizes):
         # create neural network
