@@ -14,9 +14,9 @@ class RCDriverNNOnly(object):
         self.server_socket.bind((host, port))
         self.server_socket.listen(0)
 
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect(('192.168.0.112', 1234))
-        connection2 = client_socket.makefile('wb')
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect(('192.168.0.112', 1234))
+        self.connection2 = client_socket.makefile('wb')
 
         # accept a single connection
         self.connection = self.server_socket.accept()[0].makefile('rb')
