@@ -76,8 +76,8 @@ class RCDriverNNOnly(object):
                         break
         finally:
             cv2.destroyAllWindows()
-            self.connection.close()
-            self.server_socket.close()
+            connection.close()
+            server_socket.close()
 
     def sendPrediction(self, pred):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
