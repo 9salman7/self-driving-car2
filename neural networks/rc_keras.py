@@ -55,6 +55,7 @@ class RCDriverNNOnly(object):
                     
                     # neural network makes prediction
                     prediction = self.nn.predictKeras(image_array)
+                    print(prediction)
                     #prediction = self.nn.predict(image_array)
 
                     #pred = self.connection.write(prediction)
@@ -75,7 +76,7 @@ class RCDriverNNOnly(object):
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
         while True:
-            print(pred)
+            #print(pred)
             connection2.write(bytes(str(pred), 'utf-8'))
 
 
