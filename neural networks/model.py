@@ -100,11 +100,12 @@ class NeuralNetwork(object):
         #self.model = cv2.dnn.readNetFromTensorflow("tf_model.pb")
 
     def load_modelKeras(self,path):
+
         if not os.path.exists(path):
             print("Model does not exist, exit")
             sys.exit()
         self.modelKeras = load_model('model_test.h5')
-       # print("model loaded")
+        print("model loaded")
 
     def predict(self, X):
         resp = None
