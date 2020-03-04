@@ -121,4 +121,5 @@ class NeuralNetwork(object):
         X = X.reshape(X.shape[0], 120, 360, 1)
         y_pred = self.modelKeras.predict_classes(X)
         #y_true = np.argmax(y_test, -1)
+        print y_pred
         return y_pred
