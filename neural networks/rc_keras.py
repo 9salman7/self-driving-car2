@@ -71,7 +71,7 @@ class RCDriverNNOnly(object):
             self.connection.close()
             self.server_socket.close()
 
-    def sendPrediction():
+    def sendPrediction(pred):
         while True:
             pred = self.connection2.write(bytes(str(prediction), 'utf8'))
 
@@ -89,6 +89,6 @@ if __name__ == '__main__':
   
 
     rc = RCDriverNNOnly(h, p, path)
-    Thread(target=rc.sendPrediction(0)).start()
+    Thread(target=rc.sendPrediction()).start()
     rc.drive()
 
