@@ -75,7 +75,7 @@ class RCDriverNNOnly(object):
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
         while True:
-            connection2.write(bytes(str(pred), 'utf8'))
+            connection2.write(bytes(str(pred), 'utf-8'))
 
 
 

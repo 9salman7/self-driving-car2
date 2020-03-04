@@ -35,10 +35,10 @@ class RCControl(object):
         try:
             while(True):
                 prediction=self.connection.read(1024)
-                prediction.decode() 
+                p=prediction.decode('utf-8') 
                 #pred=str(prediction, 'utf-8')
 
-                print(prediction)
+                print(p)
 
                 if prediction == 2:
                     #self.serial_port.write(chr(1).encode())
