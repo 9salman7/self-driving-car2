@@ -27,7 +27,6 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
-        print("drive called")
         stream_bytes = b' '
         try:
             # stream video frames one by one
@@ -93,9 +92,11 @@ if __name__ == '__main__':
     # model path
     path = "model_test.h5"
   
-  
+    fr=0
     rc = RCDriverNNOnly(h, p, path)
-    rc.drive()
+    while(fr!=10):
+        rc.drive()
+        fr+=1
     #Thread(target=rc.sendPrediction()).start()
     #rc.drive()
 
