@@ -74,7 +74,7 @@ class RCControl(object):
 
                 else:
                     self.stop()
-                    print("Stop")
+                    #print("Stop")
                     wiringpi.digitalWrite(21, 0)
                     wiringpi.digitalWrite(22, 0)
                     wiringpi.digitalWrite(23, 0)
