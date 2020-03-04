@@ -53,7 +53,7 @@ class RCDriverNNOnly(object):
                     #prediction = self.nn.predict(image_array)
 
                     #pred = self.connection.write(prediction)
-                    sendPrediction()
+                    self.sendPrediction()
                     #elf.rc_car.steer(prediction)
 
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -73,7 +73,7 @@ class RCDriverNNOnly(object):
 
 if __name__ == '__main__':
     # host, port
-    h, p = "192.168.0.105", 1234
+    h, p = "192.168.0.112", 1234
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
