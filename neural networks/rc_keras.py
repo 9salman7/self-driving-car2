@@ -41,7 +41,7 @@ class RCDriverNNOnly(object):
             # stream video frames one by one
             while True:
 
-                stream_bytes += self.connection.read(1024)
+                stream_bytes += connection.read(1024)
                 first = stream_bytes.find(b'\xff\xd8')
                 last = stream_bytes.find(b'\xff\xd9')
 
