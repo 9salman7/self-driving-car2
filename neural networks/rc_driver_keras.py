@@ -35,6 +35,7 @@ class RCControl(object):
         try:
             while(True):
                 prediction=self.connection.read(1024)
+                print(pred)
                 if prediction == 2:
                     #self.serial_port.write(chr(1).encode())
                     print("Forward")
