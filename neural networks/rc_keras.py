@@ -10,38 +10,29 @@ class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
 
-        #self.server_socket = socket.socket()
-        #self.server_socket.bind((host, port))
-        #self.server_socket.listen(0)
+        self.server_socket = socket.socket()
+        self.server_socket.bind((host, port))
+        self.server_socket.listen(0)
 
+        # accept a single connection
+        self.connection = self.server_socket.accept()[0].makefile('rb')
+        
         """self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
         self.connection2 = client_socket.makefile('wb')"""
-
-        # accept a single connection
-        #self.connection = self.server_socket.accept()[0].makefile('rb')
         
         # load trained neural network
         self.nn = NeuralNetwork()
-        #self.nn.model = load_modelKeras('model_test.h5')
         self.nn.load_modelKeras("model_test.h5")
-        #self.nn.load_model("tf_model.pb")
         #self.rc_car = RCControl()
 
     def drive(self):
-        server_socket = socket.socket()
-        server_socket.bind(("192.168.0.112", 1234))
-        server_socket.listen(0)
-
-        connection = server_socket.accept()[0].makefile('rb')
-            
-
         stream_bytes = b' '
         try:
             # stream video frames one by one
             while True:
 
-                stream_bytes += connection.read(1024)
+                stream_bytes += self.connection.read(1024)
                 first = stream_bytes.find(b'\xff\xd8')
                 last = stream_bytes.find(b'\xff\xd9')
 
@@ -56,6 +47,8 @@ class RCDriverNNOnly(object):
                     roi = gray[int(height/2):height, :]
                     print("image loaded")
                     cv2.imshow('image', image)
+                    cv2.waitKey(0)
+
                     # cv2.imshow('mlp_image', roi)
 
                     # reshape image
@@ -76,8 +69,8 @@ class RCDriverNNOnly(object):
                         break
         finally:
             cv2.destroyAllWindows()
-            connection.close()
-            server_socket.close()
+            self.connection.close()
+            self.server_socket.close()
 
     def sendPrediction(self, pred):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
