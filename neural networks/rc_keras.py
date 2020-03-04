@@ -51,8 +51,10 @@ class RCDriverNNOnly(object):
                     # neural network makes prediction
                     prediction = self.nn.predictKeras(image_array)
                     #prediction = self.nn.predict(image_array)
-                    
-                    self.rc_car.steer(prediction)
+
+                    #pred = self.connection.write(prediction)
+                    sendPrediction()
+                    #elf.rc_car.steer(prediction)
 
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
@@ -62,6 +64,11 @@ class RCDriverNNOnly(object):
             cv2.destroyAllWindows()
             self.connection.close()
             self.server_socket.close()
+
+    def sendPrediction():
+        while True:
+            pred = self.connection.write(prediction)
+
 
 
 if __name__ == '__main__':
@@ -73,6 +80,7 @@ if __name__ == '__main__':
 
     # model path
     path = "model_test.h5"
+    Thread(target=sendPrediction).start()
 
     rc = RCDriverNNOnly(h, p, path)
     rc.drive()
