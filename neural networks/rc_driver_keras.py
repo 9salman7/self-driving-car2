@@ -35,9 +35,10 @@ class RCControl(object):
         try:
             while(True):
                 prediction=self.connection.read(1024)
-                #prediction.decode("utf-8") 
-                pred=str(prediction, 'utf-8')
-                print(pred)
+                prediction.decode() 
+                #pred=str(prediction, 'utf-8')
+
+                print(prediction)
 
                 if prediction == 2:
                     #self.serial_port.write(chr(1).encode())
@@ -93,7 +94,7 @@ class RCControl(object):
 
     def stop(self):
         #self.serial_port.write(chr(0).encode())
-        print("Stop")
+        #print("Stop")
         wiringpi.digitalWrite(21, 0)
         wiringpi.digitalWrite(22, 0)
         wiringpi.digitalWrite(23, 0)
