@@ -5,6 +5,7 @@ import cv2
 import math
 import wiringpi
 import RPi.GPIO as GPIO
+import socket
 
 
 class RCControl(object):
