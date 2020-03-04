@@ -4,7 +4,7 @@ import numpy as np
 import socket
 from model import NeuralNetwork
 from threading import Thread
-from rc_driver_helper import RCControl
+#from rc_driver_helper import RCControl
 
 class RCDriverNNOnly(object):
 
