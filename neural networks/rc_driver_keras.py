@@ -36,7 +36,7 @@ class RCControl(object):
             while(True):
                 prediction=self.connection.read(1024)
                 #prediction.decode("utf-8") 
-                pred=str(bytes_string, 'utf-8')
+                pred=str(prediction, 'utf-8')
                 print(pred)
 
                 if prediction == 2:
