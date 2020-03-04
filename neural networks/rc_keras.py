@@ -14,9 +14,9 @@ class RCDriverNNOnly(object):
         self.server_socket.bind((host, port))
         self.server_socket.listen(0)
 
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        """self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
-        self.connection2 = client_socket.makefile('wb')
+        self.connection2 = client_socket.makefile('wb')"""
 
         # accept a single connection
         self.connection = self.server_socket.accept()[0].makefile('rb')
@@ -71,8 +71,11 @@ class RCDriverNNOnly(object):
             self.server_socket.close()
 
     def sendPrediction(pred):
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('192.168.0.105', 1234))
+        connection2 = client_socket.makefile('wb')
         while True:
-            pred = self.connection2.write(bytes(str(prediction), 'utf8'))
+            connection2.write(bytes(str(pred), 'utf8'))
 
 
 
