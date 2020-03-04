@@ -10,16 +10,16 @@ class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
 
-        self.server_socket = socket.socket()
-        self.server_socket.bind((host, port))
-        self.server_socket.listen(0)
+        #self.server_socket = socket.socket()
+        #self.server_socket.bind((host, port))
+        #self.server_socket.listen(0)
 
         """self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
         self.connection2 = client_socket.makefile('wb')"""
 
         # accept a single connection
-        self.connection = self.server_socket.accept()[0].makefile('rb')
+        #self.connection = self.server_socket.accept()[0].makefile('rb')
         
         # load trained neural network
         self.nn = NeuralNetwork()
@@ -29,9 +29,15 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
+        server_socket = socket.socket()
+        server_socket.bind(("192.168.0.112", 1234))
+        server_socket.listen(0)
+
+        connection = server_socket.accept()[0].makefile('rb')
+            
+
         stream_bytes = b' '
         try:
-            print("ofrlgr")
             # stream video frames one by one
             while True:
 
@@ -97,6 +103,5 @@ if __name__ == '__main__':
     rc = RCDriverNNOnly(h, p, path)
     rc.drive()
     #Thread(target=rc.sendPrediction()).start()
-    print("hello")
     #rc.drive()
 
