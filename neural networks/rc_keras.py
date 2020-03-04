@@ -20,8 +20,7 @@ class RCDriverNNOnly(object):
 
         # accept a single connection
         self.connection = self.server_socket.accept()[0].makefile('rb')
-        #self.connection2= self.server_socket.makefile('wb')
-
+        
         # load trained neural network
         self.nn = NeuralNetwork()
         #self.nn.model = load_modelKeras('model_test.h5')

@@ -31,7 +31,7 @@ class RCControl(object):
         GPIO.setup(4, GPIO.OUT, initial= GPIO.LOW)  #red
         GPIO.setup(7, GPIO.OUT, initial= GPIO.LOW)  #right
 
-    def steer(self, prediction):
+    def steer(self):
         try:
             while(True):
                 prediction=self.connection.read(1024)
@@ -102,7 +102,7 @@ class RCControl(object):
 
 if __name__ == '__main__':
     rc=RCControl()
-    rc.steer(0)
+    rc.steer()
 
 
 
