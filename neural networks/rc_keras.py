@@ -4,6 +4,7 @@ import numpy as np
 import socket
 from model import NeuralNetwork
 from threading import Thread
+from rc_driver_helper import RCControl
 
 class RCDriverNNOnly(object):
 
@@ -73,7 +74,7 @@ class RCDriverNNOnly(object):
 
 if __name__ == '__main__':
     # host, port
-    h, p = "192.168.0.112", 1234
+    h, p = "192.168.0.105", 1234
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"

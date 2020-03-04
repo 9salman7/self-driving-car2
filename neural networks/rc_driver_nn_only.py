@@ -40,13 +40,13 @@ class RCDriverNNOnly(object):
 
                     # lower half of the image
                     height, width = gray.shape
-                    roi = gray
+                    roi = grayroi = gray[int(height/2):height, :]
 
                     cv2.imshow('image', image)
                     # cv2.imshow('mlp_image', roi)
 
                     # reshape image
-                    image_array = roi.reshape(1, int(height) * width).astype(np.float32)
+                    image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
 
                     # neural network makes prediction
                     prediction = self.nn.predict(image_array)
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     #sp = "/dev/tty.usbmodem1421"
 
     # model path
-    path = "/saved_model/nn_model/xml"
+    path = "saved_model/nn_model.xml"
 
     rc = RCDriverNNOnly(h, p, path)
     rc.drive()

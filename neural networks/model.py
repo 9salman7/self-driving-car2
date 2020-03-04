@@ -96,6 +96,7 @@ class NeuralNetwork(object):
             print("Model does not exist, exit")
             sys.exit()
         self.model = cv2.ml.ANN_MLP_load(path)
+        print('model loaded')
         #self.model = cv2.dnn.readNetFromTensorflow("tf_model.pb")
 
     def load_modelKeras(self,path):
@@ -111,6 +112,7 @@ class NeuralNetwork(object):
             ret, resp = self.model.predict(X)
         except Exception as e:
             print(e)
+        
         return resp.argmax(-1)
     
     def predictKeras(self, X):
