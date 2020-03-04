@@ -27,7 +27,7 @@ class RCDriverNNOnly(object):
         #self.nn.model = load_modelKeras('model_test.h5')
         self.nn.load_modelKeras("model_test.h5")
         #self.nn.load_model("tf_model.pb")
-        self.rc_car = RCControl()
+        #self.rc_car = RCControl()
 
     def drive(self):
         stream_bytes = b' '
