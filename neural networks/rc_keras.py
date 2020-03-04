@@ -31,8 +31,10 @@ class RCDriverNNOnly(object):
     def drive(self):
         stream_bytes = b' '
         try:
+            print("ofrlgr")
             # stream video frames one by one
             while True:
+
                 stream_bytes += self.connection.read(1024)
                 first = stream_bytes.find(b'\xff\xd8')
                 last = stream_bytes.find(b'\xff\xd9')
@@ -55,7 +57,7 @@ class RCDriverNNOnly(object):
                     
                     # neural network makes prediction
                     prediction = self.nn.predictKeras(image_array)
-                    print(prediction)
+                    #print(prediction)
                     #prediction = self.nn.predict(image_array)
 
                     #pred = self.connection.write(prediction)
