@@ -3,7 +3,8 @@ import cv2
 import numpy as np
 import socket
 from model import NeuralNetwork
-from threading import Thread
+#from threading import Thread
+import threading
 #from rc_driver_helper import RCControl
 
 class RCDriverNNOnly(object):
