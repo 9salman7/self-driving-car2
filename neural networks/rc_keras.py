@@ -115,7 +115,7 @@ if __name__ == '__main__':
     rc.drive()
 
     #t1.start()
-    t2.start()
+    #t2.start()
 
     #t1.join()
     #t2.join()
