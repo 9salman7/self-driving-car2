@@ -108,13 +108,13 @@ if __name__ == '__main__':
     #Thread(target=rc.sendPrediction.start()
 
 
-    t1 = threading.Thread(target=rc.drive)
+    #t1 = threading.Thread(target=rc.drive)
     t2 = threading.Thread(target=rc.sendPrediction, args=(-1,))
 
-    t1.start()
+    #t1.start()
     t2.start()
 
-    t1.join()
-    t2.join()
+    #t1.join()
+    #t2.join()
     #rc.drive()
 
