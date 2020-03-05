@@ -82,6 +82,7 @@ class RCDriverNNOnly(object):
             self.server_socket.close()
 
     def sendPrediction(self, pred):
+        print('inside sendPrediction')
         """client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
         
