@@ -10,7 +10,12 @@ class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
 
-        
+        self.server_socket = socket.socket()
+        self.server_socket.bind((host, port))
+        self.server_socket.listen(0)
+
+        # accept a single connection
+        self.connection = self.server_socket.accept()[0].makefile('rb')
         
         """self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
@@ -22,12 +27,6 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
-        self.server_socket = socket.socket()
-        self.server_socket.bind(('192.168.0.112', 1234))
-        self.server_socket.listen(0)
-
-        # accept a single connection
-        self.connection = self.server_socket.accept()[0].makefile('rb')
         print("drive called")
         stream_bytes = b' '
         try:
@@ -51,8 +50,6 @@ class RCDriverNNOnly(object):
                     frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
                     cv2.imshow('image', frame)
                     cv2.waitKey(1)
-                    self.connection.close()
-                    self.server_socket.close()
 
 
                     # cv2.imshow('mlp_image', roi)
@@ -85,13 +82,12 @@ class RCDriverNNOnly(object):
         while True:
             #print(pred)
             connection2.write(bytes(str(pred), 'utf-8'))
-            self.drive()
 
 
 
 if __name__ == '__main__':
     # host, port
-    h, p = "192.168.0.112", 1234
+    h, p = "192.168.0.100", 1234
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
