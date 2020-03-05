@@ -10,12 +10,7 @@ class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
 
-        self.server_socket = socket.socket()
-        self.server_socket.bind((host, port))
-        self.server_socket.listen(0)
-
-        # accept a single connection
-        self.connection = self.server_socket.accept()[0].makefile('rb')
+        
         
         """self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
@@ -27,6 +22,12 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
+        self.server_socket = socket.socket()
+        self.server_socket.bind(('192.168.0.112', 1234))
+        self.server_socket.listen(0)
+
+        # accept a single connection
+        self.connection = self.server_socket.accept()[0].makefile('rb')
         print("drive called")
         stream_bytes = b' '
         try:
