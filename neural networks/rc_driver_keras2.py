@@ -39,7 +39,7 @@ class RCControl(object):
 				sep = ' '
 				buf = ''
 				while sep not in buf:
-					buf+=self.conn.read(8)
+					buf+=self.conn.recv(8)
 				prediction=int(buf)
 				
 				if prediction == 2:
