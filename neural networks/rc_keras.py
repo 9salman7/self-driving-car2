@@ -111,6 +111,8 @@ if __name__ == '__main__':
     #t1 = threading.Thread(target=rc.drive)
     t2 = threading.Thread(target=rc.sendPrediction, args=(-1,))
 
+    rc.drive()
+    
     #t1.start()
     t2.start()
 
