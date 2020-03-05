@@ -69,6 +69,7 @@ class RCDriverNNOnly(object):
 
                     t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
                     t2.start()
+                    t2.join()
                    
                     #print(prediction)
                     #prediction = self.nn.predict(image_array)
