@@ -51,6 +51,8 @@ class RCDriverNNOnly(object):
                     frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
                     cv2.imshow('image', frame)
                     cv2.waitKey(1)
+                    self.connection.close()
+                    self.server_socket.close()
 
 
                     # cv2.imshow('mlp_image', roi)
