@@ -72,11 +72,7 @@ class RCDriverNNOnly(object):
 
                     #pred = self.connection.write(prediction)
                     self.sendPrediction(prediction)
-                    #elf.rc_car.steer(prediction)
                     
-                    
-                    self.drive()
-                
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
                         self.rc_car.stop()
