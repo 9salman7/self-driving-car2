@@ -79,10 +79,12 @@ class RCDriverNNOnly(object):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
+        p=0
         while True:
             #print(pred)
             p=connection2.write(bytes(str(pred), 'utf-8'))
-            if(len(p)==3):
+            p+=1
+            if(p==3):
                 break
 
 
