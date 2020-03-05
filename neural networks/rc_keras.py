@@ -82,6 +82,7 @@ class RCDriverNNOnly(object):
         while True:
             #print(pred)
             connection2.write(bytes(str(pred), 'utf-8'))
+            self.drive()
 
 
 
