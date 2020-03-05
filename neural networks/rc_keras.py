@@ -94,11 +94,14 @@ class RCDriverNNOnly(object):
 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
+        connection2 = client_socket.makefile('wb')
+
         try:
             p=str(pred)+ ' '
-            client_socket.send(p)
+            connection2.write(p)
             print('prediction sent')
         finally:
+            connection2.close()
             client_socket.close()
 
 
