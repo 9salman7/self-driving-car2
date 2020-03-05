@@ -109,7 +109,7 @@ if __name__ == '__main__':
 
 
     t1 = threading.Thread(target=rc.drive)
-    t2 = threading.Thread(target=print_square, args=(-1,))
+    t2 = threading.Thread(target=rc.sendPrediction, args=(-1,))
 
     t1.start()
     t2.start()
