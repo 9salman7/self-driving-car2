@@ -68,15 +68,15 @@ class RCDriverNNOnly(object):
                     self.prediction = self.nn.predictKeras(image_array)
 
                     if self.prediction =='[1]':
-                        p=1
+                        self.prediction=1
                     elif self.prediction == '[0]':
-                        p=0
+                        self.prediction=0
                     elif self.prediction == '[2]':
-                        p=2
+                        self.prediction=2
 
-                    #t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
-                    t2 = threading.Thread(target=rc.sendPrediction, args=(p,))
-                    
+                    print(self.prediction)
+
+                    t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
                     t2.start()
                    
                     #print(prediction)

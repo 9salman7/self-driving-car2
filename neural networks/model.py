@@ -123,6 +123,6 @@ class NeuralNetwork(object):
         #self.modelKeras._make_predict_function()
         y_pred = self.modelKeras.predict_classes(X)
         #y_true = np.argmax(y_test, -1)
-        print(y_pred)
+        #print(y_pred)
         #K.clear_session()
         return y_pred
