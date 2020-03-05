@@ -20,6 +20,8 @@ class RCDriverNNOnly(object):
         """self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
         self.connection2 = client_socket.makefile('wb')"""
+
+        self.prediction=-1
         
         # load trained neural network
         self.nn = NeuralNetwork()
@@ -47,8 +49,10 @@ class RCDriverNNOnly(object):
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
                     print("image loaded")
-                    frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-                    cv2.imshow('image', frame)
+                    
+                    #frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+                    
+                    cv2.imshow('image', image)
                     cv2.waitKey(1)
 
 
@@ -58,15 +62,15 @@ class RCDriverNNOnly(object):
                     image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
                     
                     # neural network makes prediction
-                    prediction = self.nn.predictKeras(image_array)
+                    self.prediction = self.nn.predictKeras(image_array)
                     #print(prediction)
                     #prediction = self.nn.predict(image_array)
 
                     #pred = self.connection.write(prediction)
                     #self.sendPrediction(prediction)
-                    Thread(target=self.sendPrediction(prediction)).start()
-                    #elf.rc_car.steer(prediction)
-
+                
+                    #Thread(target=self.sendPrediction(prediction)).start()
+                    
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
                         self.rc_car.stop()
@@ -99,6 +103,7 @@ if __name__ == '__main__':
     #Thread(target=rc.sendPrediction(0)).start()
     #rc.drive()
     
-    Thread(target=rc.drive()).start()
+    Thread(target=rc.drive).start()
+    Thread(target=self.sendPrediction(prediction)).start()
     #rc.drive()
 
