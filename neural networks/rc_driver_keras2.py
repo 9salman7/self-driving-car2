@@ -19,6 +19,7 @@ class RCControl(object):
 
 
 		#self.connection = self.server_socket.accept()
+		self.conn, self.addr = self.server_socket.accept()
 
 		wiringpi.wiringPiSetup()
 		wiringpi.pinMode(21, 1) 
@@ -38,7 +39,7 @@ class RCControl(object):
 				sep = ' '
 				buf = ''
 				while sep not in buf:
-					buf+=self.server_socket.recv(8)
+					buf+=self.conn.read(8)
 				prediction=int(buf)
 				
 				if prediction == 2:
@@ -89,7 +90,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.HIGH)
 		finally:
-			#self.connection.close()
+			self.conn.close()
 			self.server_socket.close()
 
 
