@@ -17,6 +17,7 @@ class RCControl(object):
         # accept a single connection
         #self.connection = self.server_socket.accept()[0].makefile('rb')
 
+
 		self.connection = self.server_socket.accept()
 
         wiringpi.wiringPiSetup()
