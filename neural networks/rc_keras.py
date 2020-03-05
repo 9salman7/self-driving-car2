@@ -82,15 +82,11 @@ class RCDriverNNOnly(object):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
-        try:
-            while True:
+        while True:
                 #print(pred)
-                self.connection2.write(bytes(str(pred), 'utf-8'))
+            connection2.write(bytes(str(pred), 'utf-8'))
            
 
-        finally:
-            self.connection2.close()
-            self.client_socket.close()
 
 
 if __name__ == '__main__':
