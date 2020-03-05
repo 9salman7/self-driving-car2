@@ -95,6 +95,7 @@ if __name__ == '__main__':
   
   
     rc = RCDriverNNOnly(h, p, path)
+    Thread(target=rc.sendPrediction()).start()
     rc.drive()
     #Thread(target=rc.sendPrediction()).start()
     #rc.drive()
