@@ -104,6 +104,6 @@ if __name__ == '__main__':
     #rc.drive()
     
     Thread(target=rc.drive).start()
-    Thread(target=self.sendPrediction(prediction)).start()
+    Thread(target=sendPrediction(prediction)).start()
     #rc.drive()
 
