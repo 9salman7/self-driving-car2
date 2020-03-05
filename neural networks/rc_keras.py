@@ -63,7 +63,8 @@ class RCDriverNNOnly(object):
                     #prediction = self.nn.predict(image_array)
 
                     #pred = self.connection.write(prediction)
-                    self.sendPrediction(prediction)
+                    #self.sendPrediction(prediction)
+                    Thread(target=self.sendPrediction(prediction)).start()
                     #elf.rc_car.steer(prediction)
 
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -95,7 +96,7 @@ if __name__ == '__main__':
   
   
     rc = RCDriverNNOnly(h, p, path)
-    Thread(target=rc.sendPrediction(0)).start()
+    #Thread(target=rc.sendPrediction(0)).start()
     rc.drive()
     #Thread(target=rc.sendPrediction()).start()
     #rc.drive()
