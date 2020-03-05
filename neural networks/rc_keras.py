@@ -58,6 +58,7 @@ class RCDriverNNOnly(object):
                     # neural network makes prediction                   
 
                     self.prediction = self.nn.predictKeras(image_array)
+                    print(self.prediction)
 
                     t2 = threading.Thread(target=self.sendPrediction, args=(self.prediction,))
                     t2.start()
@@ -95,6 +96,7 @@ class RCDriverNNOnly(object):
 
         p=str(pred)+ ' '
         client_socket.send(p)
+        print('prediction sent')
 
 if __name__ == '__main__':
     # host, port
