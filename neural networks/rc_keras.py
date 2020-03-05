@@ -102,8 +102,6 @@ if __name__ == '__main__':
   
   
     rc = RCDriverNNOnly(h, p, path)
-    #Thread(target=rc.sendPrediction(0)).start()
-    #rc.drive()
     
     #Thread(target=rc.drive).start()
     #Thread(target=rc.sendPrediction.start()
@@ -111,11 +109,11 @@ if __name__ == '__main__':
 
     #t1 = threading.Thread(target=rc.drive)
     t2 = threading.Thread(target=rc.sendPrediction, args=(-1,))
-
+    t2.start()
     rc.drive()
 
     #t1.start()
-    t2.start()
+
 
     #t1.join()
     #t2.join()
