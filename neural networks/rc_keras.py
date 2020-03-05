@@ -1,11 +1,8 @@
-
 import cv2
 import numpy as np
 import socket
 from model import NeuralNetwork
-#from threading import Thread
 import threading
-#from rc_driver_helper import RCControl
 
 class RCDriverNNOnly(object):
 
@@ -27,7 +24,6 @@ class RCDriverNNOnly(object):
         # load trained neural network
         self.nn = NeuralNetwork()
         self.nn.load_modelKeras("model_test.h5")
-        #self.rc_car = RCControl()
 
     def drive(self):
         print("drive called")
@@ -49,34 +45,21 @@ class RCDriverNNOnly(object):
                     # lower half of the image
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
-                    print("image loaded")
+                    print("Image loaded")
                     
                     #frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
                     
                     cv2.imshow('image', image)
                     cv2.waitKey(1)
 
-
-                    # cv2.imshow('mlp_image', roi)
-
                     # reshape image
                     image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
                     
-                    # neural network makes prediction
-                    
+                    # neural network makes prediction                   
 
                     self.prediction = self.nn.predictKeras(image_array)
 
-                    if self.prediction =='[1]':
-                        self.prediction=1
-                    elif self.prediction == '[0]':
-                        self.prediction=0
-                    elif self.prediction == '[2]':
-                        self.prediction=2
-
-                    print(self.prediction)
-
-                    t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
+                    t2 = threading.Thread(target=self.sendPrediction, args=(self.prediction,))
                     t2.start()
                    
                     #print(prediction)
@@ -98,29 +81,32 @@ class RCDriverNNOnly(object):
             self.server_socket.close()
 
     def sendPrediction(self, pred):
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        """client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
+        
         connection2 = client_socket.makefile('wb')
+        
         while True:        
             #print(pred)
-            p=connection2.write(bytes(str(pred), 'utf-8'))
+            p=connection2.write(bytes(str(pred), 'utf-8'))"""
+
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.connect(('192.168.0.105', 1234))
+
+        p=str(pred)+ ' '
+        client_socket.send(p)
 
 if __name__ == '__main__':
     # host, port
     h, p = "192.168.0.112", 1234
 
-    # serial port
-    #sp = "/dev/tty.usbmodem1421"
-
     # model path
     path = "model_test.h5"
-  
   
     rc = RCDriverNNOnly(h, p, path)
     
     #Thread(target=rc.drive).start()
     #Thread(target=rc.sendPrediction.start()
-
 
     #t1 = threading.Thread(target=rc.drive)
     #t2 = threading.Thread(target=rc.sendPrediction, args=(,))
@@ -129,8 +115,12 @@ if __name__ == '__main__':
 
     #t1.start()
 
-
     #t1.join()
     #t2.join()
     #rc.drive()
 
+
+
+
+#not updating in pi
+#prediction in [x] format

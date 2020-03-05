@@ -1,5 +1,3 @@
-__author__ = 'zhengwang'
-
 import cv2
 import numpy as np
 import glob
@@ -97,7 +95,7 @@ class NeuralNetwork(object):
             print("Model does not exist, exit")
             sys.exit()
         self.model = cv2.ml.ANN_MLP_load(path)
-        print('model loaded')
+        print('OpenCV model loaded')
         #self.model = cv2.dnn.readNetFromTensorflow("tf_model.pb")
 
     def load_modelKeras(self,path):
@@ -106,7 +104,7 @@ class NeuralNetwork(object):
             print("Model does not exist, exit")
             sys.exit()
         self.modelKeras = load_model('model_test.h5')
-        print("model loaded")
+        print("Keras model loaded")
 
     def predict(self, X):
         resp = None
@@ -120,9 +118,7 @@ class NeuralNetwork(object):
     def predictKeras(self, X):
         #model = load_model('model_test.h5')
         X = X.reshape(X.shape[0], 120, 360, 1)
-        #self.modelKeras._make_predict_function()
         y_pred = self.modelKeras.predict_classes(X)
         #y_true = np.argmax(y_test, -1)
         #print(y_pred)
-        #K.clear_session()
         return y_pred
