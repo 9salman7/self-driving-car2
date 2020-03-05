@@ -94,10 +94,13 @@ class RCDriverNNOnly(object):
 
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
+        try:
+            p=str(pred)+ ' '
+            client_socket.send(p)
+            print('prediction sent')
+        finally:
+            client_socket.close()
 
-        p=str(pred)+ ' '
-        client_socket.send(p)
-        print('prediction sent')
 
 if __name__ == '__main__':
     # host, port
