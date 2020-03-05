@@ -68,9 +68,10 @@ class RCDriverNNOnly(object):
                     #prediction = self.nn.predict(image_array)
 
                     #pred = self.connection.write(prediction)
-                    self.sendPrediction(self.prediction)
+                    #self.sendPrediction(self.prediction)
                 
                     #Thread(target=self.sendPrediction(prediction)).start()
+                    t2.start()
                     
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
