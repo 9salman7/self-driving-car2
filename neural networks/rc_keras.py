@@ -91,7 +91,7 @@ class RCDriverNNOnly(object):
             while True:
                 #print(pred)
                 self.connection2.write(bytes(str(pred), 'utf-8'))
-                goto 
+                self.drive() 
 
         finally:
             self.connection2.close()
@@ -101,9 +101,6 @@ class RCDriverNNOnly(object):
 if __name__ == '__main__':
     # host, port
     h, p = "192.168.0.100", 1234
-
-    # serial port
-    #sp = "/dev/tty.usbmodem1421"
 
     # model path
     path = "model_test.h5"
