@@ -47,7 +47,7 @@ class RCDriverNNOnly(object):
                     roi = gray[int(height/2):height, :]
                     print("image loaded")
                     cv2.imshow('image', image)
-                    cv2.waitKey(0)
+                    cv2.waitKey(2)
 
                     # cv2.imshow('mlp_image', roi)
 
@@ -63,10 +63,10 @@ class RCDriverNNOnly(object):
                     self.sendPrediction(prediction)
                     #elf.rc_car.steer(prediction)
 
-                    """if cv2.waitKey(0) & 0xFF == ord('q'):
+                    if cv2.waitKey(0) & 0xFF == ord('q'):
                         print("car stopped")
                         self.rc_car.stop()
-                        break"""
+                        break
         finally:
             cv2.destroyAllWindows()
             self.connection.close()
