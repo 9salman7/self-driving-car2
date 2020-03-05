@@ -67,7 +67,16 @@ class RCDriverNNOnly(object):
 
                     self.prediction = self.nn.predictKeras(image_array)
 
-                    t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
+                    if self.prediction =='[1]':
+                        p=1
+                    elif self.prediction == '[0]':
+                        p=0
+                    elif self.prediction == '[2]':
+                        p=2
+
+                    #t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
+                    t2 = threading.Thread(target=rc.sendPrediction, args=(p,))
+                    
                     t2.start()
                    
                     #print(prediction)
@@ -92,9 +101,9 @@ class RCDriverNNOnly(object):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
-        
+        while True:        
             #print(pred)
-        p=connection2.write(bytes(str(pred), 'utf-8'))
+            p=connection2.write(bytes(str(pred), 'utf-8'))
 
 if __name__ == '__main__':
     # host, port
