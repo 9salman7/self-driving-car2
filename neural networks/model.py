@@ -120,6 +120,7 @@ class NeuralNetwork(object):
     def predictKeras(self, X):
         #model = load_model('model_test.h5')
         X = X.reshape(X.shape[0], 120, 360, 1)
+        modelKeras._make_predict_function()
         y_pred = self.modelKeras.predict_classes(X)
         #y_true = np.argmax(y_test, -1)
         print(y_pred)
