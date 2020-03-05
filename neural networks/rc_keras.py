@@ -22,10 +22,6 @@ class RCDriverNNOnly(object):
         """self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
         self.connection2 = client_socket.makefile('wb')"""
-
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(('192.168.0.105', 1234))
-        self.connection2 = self.client_socket.makefile('wb')
         
         # load trained neural network
         self.nn = NeuralNetwork()
@@ -83,9 +79,9 @@ class RCDriverNNOnly(object):
             self.server_socket.close()
 
     def sendPrediction(self, pred):
-        """client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
-        connection2 = client_socket.makefile('wb')"""
+        connection2 = client_socket.makefile('wb')
         try:
             while True:
                 #print(pred)
