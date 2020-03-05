@@ -71,7 +71,7 @@ class RCDriverNNOnly(object):
                     #self.sendPrediction(self.prediction)
                 
                     #Thread(target=self.sendPrediction(prediction)).start()
-                    t2.start()
+                    #t2.start()
                     
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     rc.drive()
 
     #t1.start()
-    #t2.start()
+    t2.start()
 
     #t1.join()
     #t2.join()
