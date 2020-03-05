@@ -10,8 +10,6 @@ class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
 
-        #Thread(target=rc.sendPrediction()).start()
-        
         self.server_socket = socket.socket()
         self.server_socket.bind((host, port))
         self.server_socket.listen(0)
@@ -29,7 +27,6 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
-
         print("drive called")
         stream_bytes = b' '
         try:
@@ -50,10 +47,9 @@ class RCDriverNNOnly(object):
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
                     print("image loaded")
-
                     frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
                     cv2.imshow('image', frame)
-                    cv2.waitKey(0)
+                    cv2.waitKey(1)
 
 
                     # cv2.imshow('mlp_image', roi)
@@ -68,7 +64,8 @@ class RCDriverNNOnly(object):
 
                     #pred = self.connection.write(prediction)
                     self.sendPrediction(prediction)
-                    
+                    #elf.rc_car.steer(prediction)
+
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
                         self.rc_car.stop()
@@ -83,15 +80,15 @@ class RCDriverNNOnly(object):
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
         while True:
-                #print(pred)
-            connection2.write(bytes(str(pred), 'utf-8'))
-           
-
-
+            #print(pred)
+            p=connection2.write(bytes(str(pred), 'utf-8'))
 
 if __name__ == '__main__':
     # host, port
     h, p = "192.168.0.100", 1234
+
+    # serial port
+    #sp = "/dev/tty.usbmodem1421"
 
     # model path
     path = "model_test.h5"
@@ -99,6 +96,6 @@ if __name__ == '__main__':
   
     rc = RCDriverNNOnly(h, p, path)
     rc.drive()
-    
+    #Thread(target=rc.sendPrediction()).start()
     #rc.drive()
 
