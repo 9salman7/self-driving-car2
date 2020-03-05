@@ -27,6 +27,7 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
+        print("drive called")
         stream_bytes = b' '
         try:
             # stream video frames one by one
@@ -46,8 +47,10 @@ class RCDriverNNOnly(object):
                     height, width = gray.shape
                     roi = gray[int(height/2):height, :]
                     print("image loaded")
-                    cv2.imshow('image', image)
-                    cv2.waitKey(2)
+                    frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+                    cv2.imshow('image', frame)
+                    cv2.waitKey(1)
+
 
                     # cv2.imshow('mlp_image', roi)
 
@@ -63,7 +66,7 @@ class RCDriverNNOnly(object):
                     self.sendPrediction(prediction)
                     #elf.rc_car.steer(prediction)
 
-                    if cv2.waitKey(0) & 0xFF == ord('q'):
+                    if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
                         self.rc_car.stop()
                         break
@@ -92,11 +95,9 @@ if __name__ == '__main__':
     # model path
     path = "model_test.h5"
   
-    fr=0
+  
     rc = RCDriverNNOnly(h, p, path)
-    while(fr!=10):
-        rc.drive()
-        fr+=1
+    rc.drive()
     #Thread(target=rc.sendPrediction()).start()
     #rc.drive()
 
