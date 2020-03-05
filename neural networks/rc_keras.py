@@ -22,7 +22,7 @@ class RCDriverNNOnly(object):
         self.client_socket.connect(('192.168.0.105', 1234))
         self.connection2 = client_socket.makefile('wb')"""
 
-        self.prediction=-1
+        self.prediction
         
         # load trained neural network
         self.nn = NeuralNetwork()
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 
 
     #t1 = threading.Thread(target=rc.drive)
-    t2 = threading.Thread(target=rc.sendPrediction, args=(-1,))
+    t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
     t2.start()
     rc.drive()
 
