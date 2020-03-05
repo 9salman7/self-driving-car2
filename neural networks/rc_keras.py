@@ -81,7 +81,9 @@ class RCDriverNNOnly(object):
         connection2 = client_socket.makefile('wb')
         while True:
             #print(pred)
-            connection2.write(bytes(str(pred), 'utf-8'))
+            p=connection2.write(bytes(str(pred), 'utf-8'))
+            if(len(p)==3):
+                break
 
 
 
