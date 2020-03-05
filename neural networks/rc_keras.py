@@ -10,7 +10,7 @@ class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
 
-        Thread(target=rc.sendPrediction()).start()
+        #Thread(target=rc.sendPrediction()).start()
         
         self.server_socket = socket.socket()
         self.server_socket.bind((host, port))
