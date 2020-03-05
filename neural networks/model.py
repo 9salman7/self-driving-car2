@@ -18,6 +18,7 @@ from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Flatten, Dense, Dropout, Lambda
 from keras.models import load_model
+from keras import backend as K
 
 def load_data(input_size, path):
     print("Loading training data...")
@@ -122,4 +123,5 @@ class NeuralNetwork(object):
         y_pred = self.modelKeras.predict_classes(X)
         #y_true = np.argmax(y_test, -1)
         print(y_pred)
+        K.clear_session()
         return y_pred
