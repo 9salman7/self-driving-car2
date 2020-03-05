@@ -10,7 +10,7 @@ class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
 
-        #Thread(target=rc.sendPrediction()).start()
+        Thread(target=rc.sendPrediction()).start()
         
         self.server_socket = socket.socket()
         self.server_socket.bind((host, port))
@@ -33,55 +33,55 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
-        while True:
-            print("drive called")
-            stream_bytes = b' '
-            try:
-                # stream video frames one by one
-                while True:
 
-                    stream_bytes += self.connection.read(1024)
-                    first = stream_bytes.find(b'\xff\xd8')
-                    last = stream_bytes.find(b'\xff\xd9')
+        print("drive called")
+        stream_bytes = b' '
+        try:
+            # stream video frames one by one
+            while True:
 
-                    if first != -1 and last != -1:
-                        jpg = stream_bytes[first:last + 2]
-                        stream_bytes = stream_bytes[last + 2:]
-                        gray = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
-                        image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
+                stream_bytes += self.connection.read(1024)
+                first = stream_bytes.find(b'\xff\xd8')
+                last = stream_bytes.find(b'\xff\xd9')
 
-                        # lower half of the image
-                        height, width = gray.shape
-                        roi = gray[int(height/2):height, :]
-                        print("image loaded")
+                if first != -1 and last != -1:
+                    jpg = stream_bytes[first:last + 2]
+                    stream_bytes = stream_bytes[last + 2:]
+                    gray = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+                    image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
 
-                        frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-                        cv2.imshow('image', frame)
-                        cv2.waitKey(0)
+                    # lower half of the image
+                    height, width = gray.shape
+                    roi = gray[int(height/2):height, :]
+                    print("image loaded")
+
+                    frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+                    cv2.imshow('image', frame)
+                    cv2.waitKey(0)
 
 
-                        # cv2.imshow('mlp_image', roi)
+                    # cv2.imshow('mlp_image', roi)
 
-                        # reshape image
-                        image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
-                        
-                        # neural network makes prediction
-                        prediction = self.nn.predictKeras(image_array)
-                        #print(prediction)
-                        #prediction = self.nn.predict(image_array)
+                    # reshape image
+                    image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
+                    
+                    # neural network makes prediction
+                    prediction = self.nn.predictKeras(image_array)
+                    #print(prediction)
+                    #prediction = self.nn.predict(image_array)
 
-                        #pred = self.connection.write(prediction)
-                        self.sendPrediction(prediction)
-                        #elf.rc_car.steer(prediction)
+                    #pred = self.connection.write(prediction)
+                    self.sendPrediction(prediction)
+                    #elf.rc_car.steer(prediction)
 
-                        if cv2.waitKey(1) & 0xFF == ord('q'):
-                            print("car stopped")
-                            self.rc_car.stop()
-                            break
-            finally:
-                cv2.destroyAllWindows()
-                self.connection.close()
-                self.server_socket.close()
+                    if cv2.waitKey(1) & 0xFF == ord('q'):
+                        print("car stopped")
+                        self.rc_car.stop()
+                        break
+        finally:
+            cv2.destroyAllWindows()
+            self.connection.close()
+            self.server_socket.close()
 
     def sendPrediction(self, pred):
         """client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -91,11 +91,11 @@ class RCDriverNNOnly(object):
             while True:
                 #print(pred)
                 self.connection2.write(bytes(str(pred), 'utf-8'))
+                goto 
 
         finally:
             self.connection2.close()
             self.client_socket.close()
-
 
 
 if __name__ == '__main__':
