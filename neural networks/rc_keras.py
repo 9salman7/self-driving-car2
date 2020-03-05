@@ -69,7 +69,6 @@ class RCDriverNNOnly(object):
 
                     t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
                     t2.start()
-                    t2.join()
                    
                     #print(prediction)
                     #prediction = self.nn.predict(image_array)
@@ -93,9 +92,9 @@ class RCDriverNNOnly(object):
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect(('192.168.0.105', 1234))
         connection2 = client_socket.makefile('wb')
-        while True:
+        
             #print(pred)
-            p=connection2.write(bytes(str(pred), 'utf-8'))
+        p=connection2.write(bytes(str(pred), 'utf-8'))
 
 if __name__ == '__main__':
     # host, port
