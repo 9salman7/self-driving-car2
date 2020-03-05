@@ -7,8 +7,6 @@ from model import NeuralNetwork
 import threading
 #from rc_driver_helper import RCControl
 
-predict=-1
-
 class RCDriverNNOnly(object):
 
     def __init__(self, host, port, model_path):
@@ -67,9 +65,11 @@ class RCDriverNNOnly(object):
                     # neural network makes prediction
                     
 
-                    #self.prediction = self.nn.predictKeras(image_array)
-                    predict=self.nn.predictKeras(image_array)
+                    self.prediction = self.nn.predictKeras(image_array)
 
+                    t2 = threading.Thread(target=rc.sendPrediction, args=(self.prediction,))
+                    t2.start()
+                   
                     #print(prediction)
                     #prediction = self.nn.predict(image_array)
 
@@ -114,8 +114,8 @@ if __name__ == '__main__':
 
 
     #t1 = threading.Thread(target=rc.drive)
-    t2 = threading.Thread(target=rc.sendPrediction, args=(predict,))
-    t2.start()
+    #t2 = threading.Thread(target=rc.sendPrediction, args=(,))
+    #t2.start()
     rc.drive()
 
     #t1.start()
