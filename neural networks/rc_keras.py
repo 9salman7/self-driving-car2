@@ -103,7 +103,14 @@ if __name__ == '__main__':
     #Thread(target=rc.sendPrediction(0)).start()
     #rc.drive()
     
-    Thread(target=rc.drive).start()
-    Thread(target=rc.sendPrediction(-1)).start()
+    #Thread(target=rc.drive).start()
+    #Thread(target=rc.sendPrediction.start()
+
+
+    t1 = threading.Thread(target=rc.drive)
+    t2 = threading.Thread(target=print_square, args=(-1,))
+
+    t1.start()
+    t2.start()
     #rc.drive()
 
