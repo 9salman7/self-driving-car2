@@ -33,7 +33,7 @@ class RCDriverNNOnly(object):
         #self.rc_car = RCControl()
 
     def drive(self):
-        while(cv2.waitKey(1) & 0xFF != ord('q')):
+        while True:
             print("drive called")
             stream_bytes = b' '
             try:
