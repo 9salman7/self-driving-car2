@@ -15,11 +15,11 @@ class RCControl(object):
 		self.server_socket.listen(0)
 
 		# accept a single connection
-		#self.connection = self.server_socket.accept()[0].makefile('rb')
+		self.connection = self.server_socket.accept()[0].makefile('rb')
 
 
 		#self.connection = self.server_socket.accept()
-		self.conn, self.addr = self.server_socket.accept()
+		#self.conn, self.addr = self.server_socket.accept()
 
 		wiringpi.wiringPiSetup()
 		wiringpi.pinMode(21, 1) 
@@ -40,10 +40,11 @@ class RCControl(object):
 				buf = ''
 				while sep not in buf:
 					buf+=self.conn.recv(8)
-				prediction=int(buf)
+				#prediction=int(buf)
+				prediction = buf
 				print(prediction)
 				
-				if prediction == 2:
+				if prediction == '[2]':
 					#self.serial_port.write(chr(1).encode())
 					print("Forward")
 					wiringpi.digitalWrite(21, 0)
@@ -55,7 +56,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.LOW)
 
-				elif prediction == 0:
+				elif prediction == '[0]':
 					#self.serial_port.write(chr(7).encode())
 					print("Left")
 					wiringpi.digitalWrite(21, 0)
@@ -67,7 +68,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.LOW)
 
-				elif prediction == 1:
+				elif prediction == '[1]':
 					#self.serial_port.write(chr(6).encode())
 					print("Right")
 					wiringpi.digitalWrite(21, 0)
