@@ -14,6 +14,7 @@ class RCControl(object):
 		self.server_socket = socket.socket()
 		self.server_socket.bind(('192.168.0.105', 1234))
 		self.server_socket.listen(0)
+		self.connection= self.server_socket.accept()
 
 		# accept a single connection
 		#self.connection = self.server_socket.accept()[0].makefile('rb')
@@ -42,7 +43,7 @@ class RCControl(object):
 				#pdb.set_trace()
 				while sep not in buf:
 					print('inside while loop')
-					buf+=self.server_socket.recv(1024)
+					buf+=self.connection.recv(1024)
 				#prediction=int(buf)
 				prediction = buf
 				print(prediction)
