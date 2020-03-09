@@ -43,8 +43,10 @@ class RCControl(object):
 				while sep not in buf:
 					buf+=self.connection.recv(1024)
 				#prediction=int(buf)
-				prediction = buf
+				prediction = buf.decode('utf-8')
+
 				print(prediction)
+				print(type(prediction))
 				
 				if prediction == '2':
 					#self.serial_port.write(chr(1).encode())
