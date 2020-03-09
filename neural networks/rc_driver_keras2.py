@@ -38,7 +38,7 @@ class RCControl(object):
 		try:
 			while(True):
 				sep = ' '
-				buf = ''
+				buf = b''
 				while sep not in buf:
 					buf+=self.connection.read(2)
 				#prediction=int(buf)

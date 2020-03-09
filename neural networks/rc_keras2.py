@@ -107,7 +107,7 @@ class RCDriverNNOnly(object):
             p=connection2.write(bytes(str(pred), 'utf-8'))"""
     
         p=pred+ ' '
-        print(type(p))
+        #print(type(p))
         p = p.encode('utf-8')
         self.connection2.write(p)
         #self.connection2.write(bytes(p), encoding='utf-8')
