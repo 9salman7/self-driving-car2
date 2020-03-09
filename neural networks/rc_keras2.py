@@ -97,7 +97,7 @@ class RCDriverNNOnly(object):
             p=connection2.write(bytes(str(pred), 'utf-8'))"""
     
         p=str(pred)+ ' '
-        self.connection2.write(p)
+        self.connection2.write(bytes(p))
         print('prediction sent')
         #connection2.close
         #client_socket.close()
