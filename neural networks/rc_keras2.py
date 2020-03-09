@@ -21,7 +21,7 @@ class RCDriverNNOnly(object):
 
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect(('192.168.0.105', 1234))
-        self.connection2 = client_socket.makefile('wb')
+        self.connection2 = self.client_socket.makefile('wb')
 
         #self.prediction = -1
         
