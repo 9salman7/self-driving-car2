@@ -95,7 +95,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.HIGH)
 		finally:
-			self.connection.close()
+			#self.connection.close()
 			self.server_socket.close()
 
 
