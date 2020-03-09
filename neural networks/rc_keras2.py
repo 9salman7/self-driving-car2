@@ -64,14 +64,17 @@ class RCDriverNNOnly(object):
                     self.prediction = self.nn.predictKeras(image_array)
                     print("Keras prediction: ",self.prediction)
                     
-                    convPred = self.prediction.astype(str)
-                    print(type(convPred))
-                    xyz = convPred[0]
+                    #convPred = self.prediction.astype(str)
+                    #print(type(convPred))
+                    #xyz = convPred[0]
 
-                    #xyz = self.prediction[0]
-                    #xyz = str(xyz)
+                    xyz = self.prediction[0]
+                    xyz = str(xyz)
+                    print(xyz)
 
-                    t2 = threading.Thread(target=self.sendPrediction, args=(self.prediction,))
+                    t2 = threading.Thread(target=self.sendPrediction, args=(xyz,))
+                    
+                    #t2 = threading.Thread(target=self.sendPrediction, args=(self.prediction,))
                     t2.start()
                    
                     #print(prediction)
@@ -103,8 +106,11 @@ class RCDriverNNOnly(object):
             #print(pred)
             p=connection2.write(bytes(str(pred), 'utf-8'))"""
     
-        p=str(pred)+ ' '
-        self.connection2.write(bytes(p))
+        p=pred+ ' '
+        print(type(p))
+        p = p.encode('utf-8')
+        self.connection2.write(p)
+        #self.connection2.write(bytes(p), encoding='utf-8')
         print('prediction sent')
 
         #p=pred + ' '
