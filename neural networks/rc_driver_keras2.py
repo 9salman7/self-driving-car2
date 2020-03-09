@@ -14,7 +14,7 @@ class RCControl(object):
 		self.server_socket = socket.socket()
 		self.server_socket.bind(('192.168.0.105', 1234))
 		self.server_socket.listen(0)
-		self.connection= self.server_socket.accept()
+		self.connection= self.server_socket.accept()[0]
 
 		# accept a single connection
 		#self.connection = self.server_socket.accept()[0].makefile('rb')
