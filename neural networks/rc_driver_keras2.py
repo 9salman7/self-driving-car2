@@ -40,6 +40,7 @@ class RCControl(object):
 				sep = ' '
 				buf = b''
 				while sep not in buf:
+					print('inside while loop')
 					buf+=self.connection.read(2)
 				#prediction=int(buf)
 				prediction = buf
