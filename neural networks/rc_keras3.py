@@ -100,29 +100,12 @@ class RCDriverNNOnly(object):
 
     def sendPrediction(self, pred):
         print('inside sendPrediction')
-        """client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect(('192.168.0.105', 1234))
-        
-        connection2 = client_socket.makefile('wb')
-        
-        while True:        
-            #print(pred)
-            p=connection2.write(bytes(str(pred), 'utf-8'))"""
-    
         p=pred+ ' '
         #print(type(p))
         p = p.encode('utf-8')
         self.client_socket.send(p)
         #self.connection2.write(bytes(p), encoding='utf-8')
         print('prediction sent')
-
-        #p=pred + ' '
-        #self.connection2.write(bytes(p))
-        #print('prediction sent')
-
-        #connection2.close
-        #client_socket.close()
-
 
 if __name__ == '__main__':
     # host, port

@@ -40,15 +40,13 @@ class RCControl(object):
 			while(True):
 				sep = ' '
 				buf = b''
-				#pdb.set_trace()
 				while sep not in buf:
-					print('inside while loop')
 					buf+=self.connection.recv(1024)
 				#prediction=int(buf)
 				prediction = buf
 				print(prediction)
 				
-				if prediction == '[2]':
+				if prediction == '2':
 					#self.serial_port.write(chr(1).encode())
 					print("Forward")
 					wiringpi.digitalWrite(21, 0)
@@ -60,7 +58,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.LOW)
 
-				elif prediction == '[0]':
+				elif prediction == '0':
 					#self.serial_port.write(chr(7).encode())
 					print("Left")
 					wiringpi.digitalWrite(21, 0)
@@ -72,7 +70,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.LOW)
 
-				elif prediction == '[1]':
+				elif prediction == '1':
 					#self.serial_port.write(chr(6).encode())
 					print("Right")
 					wiringpi.digitalWrite(21, 0)
@@ -86,7 +84,7 @@ class RCControl(object):
 
 				else:
 					self.stop()
-					#print("Stop")
+					print("Stop")
 					wiringpi.digitalWrite(21, 0)
 					wiringpi.digitalWrite(22, 0)
 					wiringpi.digitalWrite(23, 0)
@@ -102,7 +100,7 @@ class RCControl(object):
 
 	def stop(self):
 		#self.serial_port.write(chr(0).encode())
-		#print("Stop")
+		print("Stop")
 		wiringpi.digitalWrite(21, 0)
 		wiringpi.digitalWrite(22, 0)
 		wiringpi.digitalWrite(23, 0)
