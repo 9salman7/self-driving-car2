@@ -4,6 +4,7 @@ import math
 import wiringpi
 import RPi.GPIO as GPIO
 import socket
+import time
 
 
 class RCControl(object):
@@ -39,7 +40,7 @@ class RCControl(object):
 				sep = ' '
 				buf = ''
 				while sep not in buf:
-					buf+=self.conn.recv(8)
+					buf+=self.conn.read(4)
 				#prediction=int(buf)
 				prediction = buf
 				print(prediction)
@@ -92,7 +93,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.HIGH)
 		finally:
-			self.conn.close()
+			self.connection.close()
 			self.server_socket.close()
 
 
@@ -111,6 +112,7 @@ class RCControl(object):
 
 if __name__ == '__main__':
 	rc=RCControl()
+	time.sleep(3)
 	rc.steer()
 
 

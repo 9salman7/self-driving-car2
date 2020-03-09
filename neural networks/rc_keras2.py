@@ -62,7 +62,14 @@ class RCDriverNNOnly(object):
                     # neural network makes prediction                   
 
                     self.prediction = self.nn.predictKeras(image_array)
-                    print(self.prediction)
+                    print("Keras prediction: ",self.prediction)
+                    
+                    convPred = self.prediction.astype(str)
+                    print(type(convPred))
+                    xyz = convPred[0]
+
+                    #xyz = self.prediction[0]
+                    #xyz = str(xyz)
 
                     t2 = threading.Thread(target=self.sendPrediction, args=(self.prediction,))
                     t2.start()
@@ -99,6 +106,11 @@ class RCDriverNNOnly(object):
         p=str(pred)+ ' '
         self.connection2.write(bytes(p))
         print('prediction sent')
+
+        #p=pred + ' '
+        #self.connection2.write(bytes(p))
+        #print('prediction sent')
+
         #connection2.close
         #client_socket.close()
 
