@@ -42,7 +42,7 @@ class RCControl(object):
 				#pdb.set_trace()
 				while sep not in buf:
 					print('inside while loop')
-					buf+=self.server_socket.recv()
+					buf+=self.server_socket.recv(1024)
 				#prediction=int(buf)
 				prediction = buf
 				print(prediction)
