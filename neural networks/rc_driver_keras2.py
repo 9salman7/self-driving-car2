@@ -115,7 +115,7 @@ class RCControl(object):
 
 if __name__ == '__main__':
 	rc=RCControl()
-	time.sleep(3)
+	time.sleep(1)
 	rc.steer()
 
 
