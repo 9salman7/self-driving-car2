@@ -43,8 +43,8 @@ class RCControl(object):
 				while sep not in buf:
 					buf+=self.connection.recv(1024)
 				#prediction=int(buf)
-				prediction = buf.decode('utf-8')
-
+				#prediction = buf.decode('utf-8')
+				prediction = str(buf)
 				print(prediction)
 				print(type(prediction))
 				
