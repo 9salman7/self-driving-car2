@@ -5,7 +5,7 @@ import wiringpi
 import RPi.GPIO as GPIO
 import socket
 import time
-
+import pdb
 
 class RCControl(object):
 
@@ -39,6 +39,7 @@ class RCControl(object):
 			while(True):
 				sep = ' '
 				buf = b''
+				pdb.set_trace()
 				while sep not in buf:
 					print('inside while loop')
 					buf+=self.connection.read()
