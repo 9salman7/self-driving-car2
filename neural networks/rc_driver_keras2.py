@@ -38,9 +38,7 @@ class RCControl(object):
 				#prediction=int(buf)
 				#prediction = buf.decode('utf-8')
 				prediction = str(buf)
-				print(prediction)
-				print(type(prediction))
-				print(len(prediction))
+				print("Prediction: ", prediction)
 				
 				if prediction == "2 ":
 					print("Forward")

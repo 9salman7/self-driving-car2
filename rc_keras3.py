@@ -23,7 +23,7 @@ class RCDriverNNOnly(object):
         self.nn.load_modelKeras("model_test.h5")
 
     def drive(self):
-        print("drive called")
+        #print("drive called")
         stream_bytes = b' '
         try:
             # stream video frames one by one
@@ -46,7 +46,7 @@ class RCDriverNNOnly(object):
                     
                     #frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
                     
-                    cv2.imshow('image', image)
+                    cv2.imshow('RPi Camera Stream', image)
                     cv2.waitKey(1)
 
                     # reshape image
@@ -54,7 +54,7 @@ class RCDriverNNOnly(object):
                     
                     # neural network makes prediction                   
                     self.prediction = self.nn.predictKeras(image_array)
-                    print("Keras prediction: ",self.prediction)
+                    #print("Keras prediction: ",self.prediction)
                     
                     label = self.prediction[0]
                     label = str(label)
@@ -73,7 +73,7 @@ class RCDriverNNOnly(object):
         p=pred+ ' '
         p = p.encode('utf-8')
         self.client_socket.send(p)
-        print('prediction sent')
+        print('Prediction sent to Pi')
 
 if __name__ == '__main__':
     # host, port
