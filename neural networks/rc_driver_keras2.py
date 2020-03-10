@@ -42,7 +42,7 @@ class RCControl(object):
 				print(type(prediction))
 				print(len(prediction))
 				
-				if prediction == "2":
+				if prediction == "2 ":
 					print("Forward")
 					wiringpi.digitalWrite(21, 0)
 					wiringpi.digitalWrite(22, 0)
@@ -53,7 +53,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.LOW)
 
-				elif prediction == "0":
+				elif prediction == "0 ":
 					print("Left")
 					wiringpi.digitalWrite(21, 0)
 					wiringpi.digitalWrite(22, 1)
@@ -64,7 +64,7 @@ class RCControl(object):
 					GPIO.output(7, GPIO.LOW) # Turn on
 					GPIO.output(4, GPIO.LOW)
 
-				elif prediction == "1":
+				elif prediction == "1 ":
 					print("Right")
 					wiringpi.digitalWrite(21, 0)
 					wiringpi.digitalWrite(22, 0)
