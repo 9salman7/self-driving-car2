@@ -25,7 +25,7 @@ class RCDriverNNOnly(object):
 
         self.h1 = 5.5 #stop sign - measure manually
 
-        self.stop_cascade = cv2.CascadeClassifier("C:/Users/My PC/Anaconda3/envs/tf/Lib/site-packages/cv2/data/stop_sign.xml")
+        self.stop_cascade = cv2.CascadeClassifier("stop_sign.xml")
 
         self.d_stop_light_thresh = 25
         self.d_stop_sign = self.d_stop_light_thresh    
