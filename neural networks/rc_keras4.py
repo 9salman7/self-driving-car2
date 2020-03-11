@@ -110,7 +110,7 @@ class RCDriverNNOnly(object):
                         
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("car stopped")
-                        #self.rc_car.stop()
+                        self.sendPrediction("3")
                         break
         finally:
             cv2.destroyAllWindows()
