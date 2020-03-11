@@ -12,7 +12,7 @@ class RCControl(object):
 	def __init__(self):
 
 		self.server_socket = socket.socket()
-		self.server_socket.bind(('192.168.0.105', 1234))
+		self.server_socket.bind(('192.168.0.107', 1234))
 		self.server_socket.listen(0)
 		self.connection= self.server_socket.accept()[0]
 
