@@ -117,7 +117,7 @@ void right()
 
 	digitalWrite(HighR, HIGH);
 	digitalWrite(LowR, LOW);
-	analogWrite(EnableR,255);
+	analogWrite(EnableR,230);
 	//delay(time);   
 }
 
