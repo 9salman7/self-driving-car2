@@ -244,7 +244,7 @@ if __name__ == '__main__':
     GPIO.setup(4, GPIO.OUT, initial= GPIO.LOW)  #red
     GPIO.setup(7, GPIO.OUT, initial= GPIO.LOW)
     # host, port
-    h, p = "192.168.0.105", 1234
+    h, p = "192.168.0.107", 1234
 
     # serial port
     #sp = "/dev/tty.usbmodem1421"
