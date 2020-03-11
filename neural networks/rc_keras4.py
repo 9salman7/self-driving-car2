@@ -3,6 +3,7 @@ import numpy as np
 import socket
 from model import NeuralNetwork
 import threading
+import math
 
 class RCDriverNNOnly(object):
 
