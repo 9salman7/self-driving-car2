@@ -20,7 +20,7 @@ class RCDriverNNOnly(object):
         
         # load trained neural network
         self.nn = NeuralNetwork()
-        self.nn.load_modelKeras("model_test.h5")
+        self.nn.load_modelKeras("model_test (1).h5")
 
     def drive(self):
         #print("drive called")
