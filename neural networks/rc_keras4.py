@@ -21,7 +21,7 @@ class RCDriverNNOnly(object):
         
         # load trained neural network
         self.nn = NeuralNetwork()
-        self.nn.load_modelKeras("model_test.h5")
+        self.nn.load_modelKeras("model_test (1).h5")
 
         self.h1 = 5.5 #stop sign - measure manually
 
@@ -159,7 +159,7 @@ class RCDriverNNOnly(object):
 
 if __name__ == '__main__':
     # host, port
-    h, p = "192.168.0.106", 1234    #laptop
+    h, p = "192.168.0.100", 1234    #laptop
 
     # model path
     path = "model_test.h5"
