@@ -44,15 +44,12 @@ class RCDriverNNOnly(object):
 
 
 	def drive(self):
-		#stop_flag = False
-		#stop_sign_active = True
+		stop_flag = False
+		stop_sign_active = True
 		stream_bytes = b' '
 		try:
 			# stream video frames one by one
-			while True:
-				stop_flag = False
-				stop_sign_active = True
-		
+			while True:		
 				stream_bytes += self.connection.read(1024)
 				first = stream_bytes.find(b'\xff\xd8')
 				last = stream_bytes.find(b'\xff\xd9')
@@ -106,6 +103,8 @@ class RCDriverNNOnly(object):
 							stop_sign_active = False
 
 					else:
+						stop_sign_active = True
+
 						# neural network makes prediction                   
 						self.prediction = self.nn.predictKeras(image_array)
 						#print("Keras prediction: ",self.prediction)
