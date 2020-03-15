@@ -103,7 +103,7 @@ class NeuralNetwork(object):
         if not os.path.exists(path):
             print("Model does not exist, exit")
             sys.exit()
-        self.modelKeras = load_model('model_test (1).h5')
+        self.modelKeras = load_model('model_test.h5')
         print("Keras model loaded")
 
     def predict(self, X):

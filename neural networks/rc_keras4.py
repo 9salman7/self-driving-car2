@@ -21,7 +21,7 @@ class RCDriverNNOnly(object):
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
-		self.nn.load_modelKeras("model_test (1).h5")
+		self.nn.load_modelKeras("model_test.h5")
 
 		self.h1 = 5.5 #stop sign - measure manually
 
