@@ -1,89 +1,31 @@
 # USAGE
 # python webstreaming.py --ip 0.0.0.0 --port 8000
 
-# import the necessary packages
-from pyimagesearch.motion_detection import SingleMotionDetector
-from imutils.video import VideoStream
+import cv2
+import numpy as np
+import socket
+from model import NeuralNetwork
+import threading
+import math
+
 from flask import Response
 from flask import Flask
 from flask import render_template
-import threading
 import argparse
 import datetime
-import imutils
 import time
-import cv2
 
-# initialize the output frame and a lock used to ensure thread-safe
-# exchanges of the output frames (useful for multiple browsers/tabs
-# are viewing tthe stream)
 outputFrame = None
 lock = threading.Lock()
 
 # initialize a flask object
 app = Flask(__name__)
 
-# initialize the video stream and allow the camera sensor to
-# warmup
-#vs = VideoStream(usePiCamera=1).start()
-vs = VideoStream(src=0).start()
-time.sleep(2.0)
-
 @app.route("/")
 def index():
 	# return the rendered template
 	return render_template("index.html")
 
-def detect_motion(frameCount):
-	# grab global references to the video stream, output frame, and
-	# lock variables
-	global vs, outputFrame, lock
-
-	# initialize the motion detector and the total number of frames
-	# read thus far
-	md = SingleMotionDetector(accumWeight=0.1)
-	total = 0
-
-	# loop over frames from the video stream
-	while True:
-		# read the next frame from the video stream, resize it,
-		# convert the frame to grayscale, and blur it
-		frame = vs.read()
-		frame = imutils.resize(frame, width=400)
-		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-		gray = cv2.GaussianBlur(gray, (7, 7), 0)
-
-		# grab the current timestamp and draw it on the frame
-		timestamp = datetime.datetime.now()
-		cv2.putText(frame, timestamp.strftime(
-			"%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10),
-			cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
-
-		# if the total number of frames has reached a sufficient
-		# number to construct a reasonable background model, then
-		# continue to process the frame
-		if total > frameCount:
-			# detect motion in the image
-			motion = md.detect(gray)
-
-			# cehck to see if motion was found in the frame
-			if motion is not None:
-				# unpack the tuple and draw the box surrounding the
-				# "motion area" on the output frame
-				(thresh, (minX, minY, maxX, maxY)) = motion
-				cv2.rectangle(frame, (minX, minY), (maxX, maxY),
-					(0, 0, 255), 2)
-		
-		# update the background model and increment the total number
-		# of frames read thus far
-		md.update(gray)
-		total += 1
-
-		# acquire the lock, set the output frame, and release the
-		# lock
-		with lock:
-			outputFrame = frame.copy()
-		
 def generate():
 	# grab global references to the output frame and lock variables
 	global outputFrame, lock
@@ -115,9 +57,219 @@ def video_feed():
 	return Response(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
 
-# check to see if this is the main thread of execution
+class RCDriverNNOnly(object):
+
+	def __init__(self, host, port, model_path):
+
+		self.server_socket = socket.socket()
+		self.server_socket.bind((host, port))
+		self.server_socket.listen(0)
+
+		# accept a single connection
+		self.connection = self.server_socket.accept()[0].makefile('rb')
+		
+		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.client_socket.connect(('192.168.0.107', 1234))   #pi
+		
+		# load trained neural network
+		self.nn = NeuralNetwork()
+		self.nn.load_modelKeras("model_test.h5")
+
+		self.h1 = 5.5 #stop sign - measure manually
+		self.h2 = 5.5 #traffic light
+
+		#self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"C:/Users/My\ PC/Anaconda3/envs/tf/Lib/site-packages/cv2/data/stop_sign.xml")
+		#self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"D:/Downloads/self-driving-car2/neural networks/stop_sign.xml")
+		self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"stop_sign.xml")
+		self.traffic_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "traffic_light.xml")	
+
+		self.d_stop_light_thresh = 50
+		self.d_stop_sign = self.d_stop_light_thresh    
+		self.d_light = d_stop_light_thresh
+		
+		self.stop_start = 0  # start time when stop at the stop sign
+		self.stop_finish = 0
+		self.stop_time = 0
+		self.drive_time_after_stop = 0
+
+        self.red_light = False
+        self.green_light = False
+        self.yellow_light = False
+
+		self.alpha = 8.0 * math.pi / 180    # degree measured manually
+		self.v0 = 119.865631204             # from camera matrix
+		self.ay = 332.262498472             # from camera matrix
+
+	def drive(self):
+		stop_flag = False
+		stop_sign_active = True
+		stream_bytes = b' '
+
+		global outputFrame, lock
+
+		try:
+			# stream video frames one by one
+			while True:		
+				stream_bytes += self.connection.read(1024)
+				first = stream_bytes.find(b'\xff\xd8')
+				last = stream_bytes.find(b'\xff\xd9')
+
+				if first != -1 and last != -1:
+					jpg = stream_bytes[first:last + 2]
+					stream_bytes = stream_bytes[last + 2:]
+					gray = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+					image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
+
+					# lower half of the image
+					height, width = gray.shape
+					roi = gray[int(height/2):height, :]
+					#print("Image loaded")
+					
+					#frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+
+					# object detection
+					v_param1 = self.detect(self.stop_cascade, gray, image)
+					v_param2 = self.detect(self.traffic_cascade, gray, image)
+
+					# distance measurement
+					if v_param1 > 0 or v_param2 > 0:
+						d1 = self.calculate(v_param1, self.h1, 300, image)
+						d2 = self.calculate(v_param2, self.h2, 100, image)
+						self.d_stop_sign = d1
+						self.d_light = d2
+					
+					cv2.imshow('RPi Camera Stream', image)
+					cv2.waitKey(1)
+
+					# reshape image
+					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
+					
+					if 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
+						print("Stop sign ahead")
+						label = "3"
+						self.sendPrediction(label)
+						#self.rc_car.stop()
+
+						# stop for 5 seconds
+						if stop_flag is False:
+							self.stop_start = cv2.getTickCount()
+							stop_flag = True
+						self.stop_finish = cv2.getTickCount()
+
+						self.stop_time = (self.stop_finish - self.stop_start) / cv2.getTickFrequency()
+						print("Stop time: %.2fs" % self.stop_time)
+
+						# 5 seconds later, continue driving
+						if self.stop_time > 5:
+							print("Waited for 5 seconds")
+							stop_flag = False
+							stop_sign_active = False
+
+					elif 0 < self.d_light < self.d_stop_light_thresh:
+						# print("Traffic light ahead")
+						if self.red_light:
+							print("Red light")
+							label = "3"
+							self.sendPrediction(label)
+						elif self.green_light:
+							print("Green light")
+							pass
+						elif self.yellow_light:
+							print("Yellow light")
+							pass
+
+						self.d_light = self.d_stop_light_thresh
+						self.red_light = False
+						self.green_light = False
+						self.yellow_light = False
+
+					else:
+						stop_sign_active = True
+
+						# neural network makes prediction                   
+						self.prediction = self.nn.predictKeras(image_array)
+						#print("Keras prediction: ",self.prediction)
+						
+						label = self.prediction[0]
+						label = str(label)
+						self.sendPrediction(label)
+
+					with lock:
+						outputFrame = image.copy()
+						
+					if cv2.waitKey(1) & 0xFF == ord('q'):
+						print("Car stopped")
+						self.sendPrediction("3")
+						break
+		finally:
+			cv2.destroyAllWindows()
+			self.connection.close()
+			self.server_socket.close()
+
+	def sendPrediction(self, pred):
+		p=pred+ ' '
+		p = p.encode('utf-8')
+		self.client_socket.send(p)
+		#print('Prediction sent to Pi')
+
+	def calculate(self, v, h, x_shift, image):
+		# compute and return the distance from the target point to the camera
+		d = h / math.tan(self.alpha + math.atan((v - self.v0) / self.ay))
+		if d > 0:
+			cv2.putText(image, "%.1fcm" % d,
+						(image.shape[1] - x_shift, image.shape[0] - 20),
+						cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+		return d
+
+	def detect(self, cascade_classifier, gray_image, image):
+
+		# y camera coordinate of the target point 'P'
+		v = 0
+
+		# detection
+		cascade_obj = cascade_classifier.detectMultiScale(
+			gray_image,
+			scaleFactor=1.1,
+			minNeighbors=5,
+			minSize=(30, 30))
+
+		# draw a rectangle around the objects
+		for (x_pos, y_pos, width, height) in cascade_obj:
+			cv2.rectangle(image, (x_pos + 5, y_pos + 5), (x_pos + width - 5, y_pos + height - 5), (255, 255, 255), 2)
+			v = y_pos + height - 5
+			# print(x_pos+5, y_pos+5, x_pos+width-5, y_pos+height-5, width, height)
+
+			# stop sign
+			if width / height == 1:
+				cv2.putText(image, 'STOP', (x_pos, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
+            else:
+                roi = gray_image[y_pos + 10:y_pos + height - 10, x_pos + 10:x_pos + width - 10]
+                mask = cv2.GaussianBlur(roi, (25, 25), 0)
+                (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(mask)
+
+                # check if light is on
+                if maxVal - minVal > threshold:
+                    cv2.circle(roi, maxLoc, 5, (255, 0, 0), 2)
+
+                    # Red light
+                    if 1.0 / 8 * (height - 30) < maxLoc[1] < 4.0 / 8 * (height - 30):
+                        cv2.putText(image, 'Red', (x_pos + 5, y_pos - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                        self.red_light = True
+
+                    # Green light
+                    elif 5.5 / 8 * (height - 30) < maxLoc[1] < height - 30:
+                        cv2.putText(image, 'Green', (x_pos + 5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),2)
+                        self.green_light = True
+
+                    # yellow light
+                    elif 4.0/8*(height-30) < maxLoc[1] < 5.5/8*(height-30):
+                        cv2.putText(image, 'Yellow', (x_pos+5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
+                        self.yellow_light = True
+
+		return v
+
 if __name__ == '__main__':
-	# construct the argument parser and parse command line arguments
 	ap = argparse.ArgumentParser()
 	ap.add_argument("-i", "--ip", type=str, required=True,
 		help="ip address of the device")
@@ -127,15 +279,17 @@ if __name__ == '__main__':
 		help="# of frames used to construct the background model")
 	args = vars(ap.parse_args())
 
+	h, p = "192.168.0.100", 1234    #laptop
+
+	# model path
+	path = "model_test.h5"
+  
+	rc = RCDriverNNOnly(h, p, path)
+
 	# start a thread that will perform motion detection
-	t = threading.Thread(target=detect_motion, args=(
-		args["frame_count"],))
+	t = threading.Thread(target=rc.drive())
 	t.daemon = True
 	t.start()
 
 	# start the flask app
-	app.run(host=args["ip"], port=args["port"], debug=True,
-		threaded=True, use_reloader=False)
-
-# release the video stream pointer
-vs.stop()
+	app.run(host=args["ip"], port=args["port"], debug=True, threaded=True, use_reloader=False)
