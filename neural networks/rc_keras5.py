@@ -31,7 +31,7 @@ class RCDriverNNOnly(object):
 		self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"stop_sign.xml")
 		self.traffic_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "traffic_light.xml")	
 
-		self.d_stop_light_thresh = 50
+		self.d_stop_light_thresh = 70
 		self.d_stop_sign = self.d_stop_light_thresh    
 		self.d_light = self.d_stop_light_thresh
 		
