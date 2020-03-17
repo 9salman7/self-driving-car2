@@ -85,16 +85,16 @@ class RCDriverNNOnly(object):
 
 		self.d_stop_light_thresh = 50
 		self.d_stop_sign = self.d_stop_light_thresh    
-		self.d_light = d_stop_light_thresh
+		self.d_light = self.d_stop_light_thresh
 		
 		self.stop_start = 0  # start time when stop at the stop sign
 		self.stop_finish = 0
 		self.stop_time = 0
 		self.drive_time_after_stop = 0
 
-        self.red_light = False
-        self.green_light = False
-        self.yellow_light = False
+		self.red_light = False
+		self.green_light = False
+		self.yellow_light = False
 
 		self.alpha = 8.0 * math.pi / 180    # degree measured manually
 		self.v0 = 119.865631204             # from camera matrix
@@ -243,29 +243,29 @@ class RCDriverNNOnly(object):
 			if width / height == 1:
 				cv2.putText(image, 'STOP', (x_pos, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
-            else:
-                roi = gray_image[y_pos + 10:y_pos + height - 10, x_pos + 10:x_pos + width - 10]
-                mask = cv2.GaussianBlur(roi, (25, 25), 0)
-                (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(mask)
+			else:
+				roi = gray_image[y_pos + 10:y_pos + height - 10, x_pos + 10:x_pos + width - 10]
+				mask = cv2.GaussianBlur(roi, (25, 25), 0)
+				(minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(mask)
 
-                # check if light is on
-                if maxVal - minVal > threshold:
-                    cv2.circle(roi, maxLoc, 5, (255, 0, 0), 2)
+				# check if light is on
+				if maxVal - minVal > threshold:
+					cv2.circle(roi, maxLoc, 5, (255, 0, 0), 2)
 
-                    # Red light
-                    if 1.0 / 8 * (height - 30) < maxLoc[1] < 4.0 / 8 * (height - 30):
-                        cv2.putText(image, 'Red', (x_pos + 5, y_pos - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-                        self.red_light = True
+					# Red light
+					if 1.0 / 8 * (height - 30) < maxLoc[1] < 4.0 / 8 * (height - 30):
+						cv2.putText(image, 'Red', (x_pos + 5, y_pos - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+						self.red_light = True
 
-                    # Green light
-                    elif 5.5 / 8 * (height - 30) < maxLoc[1] < height - 30:
-                        cv2.putText(image, 'Green', (x_pos + 5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),2)
-                        self.green_light = True
+					# Green light
+					elif 5.5 / 8 * (height - 30) < maxLoc[1] < height - 30:
+						cv2.putText(image, 'Green', (x_pos + 5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),2)
+						self.green_light = True
 
-                    # yellow light
-                    elif 4.0/8*(height-30) < maxLoc[1] < 5.5/8*(height-30):
-                        cv2.putText(image, 'Yellow', (x_pos+5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
-                        self.yellow_light = True
+					# yellow light
+					elif 4.0/8*(height-30) < maxLoc[1] < 5.5/8*(height-30):
+						cv2.putText(image, 'Yellow', (x_pos+5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
+						self.yellow_light = True
 
 		return v
 
