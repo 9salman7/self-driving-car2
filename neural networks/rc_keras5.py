@@ -33,7 +33,7 @@ class RCDriverNNOnly(object):
 
 		self.d_stop_light_thresh = 50
 		self.d_stop_sign = self.d_stop_light_thresh    
-		self.d_light = d_stop_light_thresh
+		self.d_light = self.d_stop_light_thresh
 		
 		self.stop_start = 0  # start time when stop at the stop sign
 		self.stop_finish = 0
