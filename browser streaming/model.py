@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 import random
 import collections
 
-import tensorflow as tf
+#import tensorflow as tf
 import keras
 from keras.callbacks import ModelCheckpoint
 from keras.models import Sequential
@@ -17,6 +17,10 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Flatten, Dense, Dropout, Lambda
 from keras.models import load_model
 from keras import backend as K
+import tensorflow.compat.v1 as tf
+
+tf.disable_v2_behavior() 
+
  
 def load_data(input_size, path):
     print("Loading training data...")
