@@ -17,7 +17,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Flatten, Dense, Dropout, Lambda
 from keras.models import load_model
 from keras import backend as K
-
+ 
 def load_data(input_size, path):
     print("Loading training data...")
     start = time.time()
@@ -94,6 +94,8 @@ class NeuralNetwork(object):
         if not os.path.exists(path):
             print("Model does not exist, exit")
             sys.exit()
+       
+     
         self.model = cv2.ml.ANN_MLP_load(path)
         print('OpenCV model loaded')
         #self.model = cv2.dnn.readNetFromTensorflow("tf_model.pb")

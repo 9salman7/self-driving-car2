@@ -15,6 +15,8 @@ import argparse
 import datetime
 import time
 
+import tensorflow as tf
+
 outputFrame = None
 lock = threading.Lock()
 
@@ -73,6 +75,7 @@ class RCDriverNNOnly(object):
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
+
 		self.nn.load_modelKeras("model_test.h5")
 
 		self.h1 = 5.5 #stop sign - measure manually
@@ -186,7 +189,8 @@ class RCDriverNNOnly(object):
 					else:
 						stop_sign_active = True
 
-						# neural network makes prediction                   
+						# neural network makes prediction   
+						
 						self.prediction = self.nn.predictKeras(image_array)
 						#print("Keras prediction: ",self.prediction)
 						
