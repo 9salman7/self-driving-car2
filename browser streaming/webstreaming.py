@@ -275,8 +275,6 @@ if __name__ == '__main__':
 		help="ip address of the device")
 	ap.add_argument("-o", "--port", type=int, required=True,
 		help="ephemeral port number of the server (1024 to 65535)")
-	ap.add_argument("-f", "--frame-count", type=int, default=32,
-		help="# of frames used to construct the background model")
 	args = vars(ap.parse_args())
 
 	h, p = "192.168.0.100", 1234    #laptop
@@ -287,7 +285,7 @@ if __name__ == '__main__':
 	rc = RCDriverNNOnly(h, p, path)
 
 	# start a thread that will perform motion detection
-	t = threading.Thread(target=rc.drive())
+	t = threading.Thread(target=rc.drive, args=())
 	t.daemon = True
 	t.start()
 
