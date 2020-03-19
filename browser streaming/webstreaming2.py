@@ -270,24 +270,24 @@ class RCDriverNNOnly(object):
 		return v
 
 if __name__ == '__main__':
-	ap = argparse.ArgumentParser()
-	ap.add_argument("-i", "--ip", type=str, required=True,
-		help="ip address of the device")
-	ap.add_argument("-o", "--port", type=int, required=True,
-		help="ephemeral port number of the server (1024 to 65535)")
-	args = vars(ap.parse_args())
-
 	h, p = "192.168.0.100", 1234    #laptop
 
 	# model path
 	path = "model_test.h5"
   
 	rc = RCDriverNNOnly(h, p, path)
+	rc.drive()
 
-	# start a thread that will perform motion detection
-	t = threading.Thread(target=rc.drive, args=())
-	t.daemon = True
-	t.start()
 
-	# start the flask app
-	app.run(host=args["ip"], port=args["port"], debug=True, threaded=False, use_reloader=False)
+	#export FLASK_APP=webstreaming2
+	#flask run
+
+	"""Windows CMD:
+
+	> set FLASK_APP=hello
+	> flask run
+
+	Windows PowerShell:
+
+	> $env:FLASK_APP = "hello"
+	> flask run"""
