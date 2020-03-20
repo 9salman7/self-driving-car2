@@ -23,6 +23,34 @@ lock = threading.Lock()
 # initialize a flask object
 app = Flask(__name__)
 
+"""@app.route('/<filename:re:.*\.html>')
+def javascripts(filename):
+	return static_file(filename, root='templates')
+
+@app.route('/<filename:re:.*\.js>')
+def javascripts(filename):
+	return static_file(filename, root='assets')
+
+@app.route('/<filename:re:.*\.css>')
+def stylesheets(filename):
+	return static_file(filename, root='assets')
+
+@app.route('/<filename:re:.*\.(jpg|png|gif|ico|svg)>')
+def images(filename):
+	return static_file(filename, root='assets')
+
+@app.route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
+def fonts(filename):
+	return static_file(filename, root='assets')
+
+@app.route('/<filename:re:.*\.html>')
+def javascripts(filename):
+	return static_file(filename, root='assets')
+
+@app.route('/<filename:re:.*\.pdf>')
+def pdfs(filename):
+	return static_file(filename, root='assets')"""
+
 @app.route("/")
 def index():
 	# return the rendered template
@@ -57,7 +85,7 @@ def video_feed():
 	return Response(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
 
-@app.get('/speechRec')
+@app.route('/speechRec')
 def speechRec():
 	r = sr.Recognizer()
 	with sr.Microphone() as source:
