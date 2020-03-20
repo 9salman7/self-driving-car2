@@ -8,9 +8,11 @@ from model import NeuralNetwork
 import threading
 import math
 
-from flask import Response
+""""from flask import Response
 from flask import Flask
-from flask import render_template
+from flask import render_template"""
+from bottle import Bottle, run, route, static_file, request, response, template, redirect, get, post
+
 import argparse
 import datetime
 import time
@@ -20,10 +22,10 @@ import tensorflow as tf
 outputFrame = None
 
 # initialize a flask object
-app = Flask(__name__)
+app = Bottle(__name__)
 
-@app.route("/")
-def index():
+@app.get("/")
+def root():
 	# return the rendered template
 	return render_template("index.html")
 
@@ -48,7 +50,7 @@ def generate():
 		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
 			bytearray(encodedImage) + b'\r\n')
 
-@app.route("/video_feed")
+@app.get("/video_feed")
 def video_feed():
 	# return the response generated along with the specific media
 	# type (mime type)

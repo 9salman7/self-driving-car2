@@ -18,6 +18,7 @@ import time
 import tensorflow as tf
 
 outputFrame = None
+lock = threading.Lock()
 
 # initialize a flask object
 app = Flask(__name__)
@@ -29,20 +30,21 @@ def index():
 
 def generate():
 	# grab global references to the output frame and lock variables
-	global outputFrame
+	global outputFrame, lock
 	# loop over frames from the output stream
 	while True:
 		# check if the output frame is available, otherwise skip
 		# the iteration of the loop
-		if outputFrame is None:
-			continue
+		with lock:
+			if outputFrame is None:
+				continue
 
-		# encode the frame in JPEG format
-		(flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+			# encode the frame in JPEG format
+			(flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
 
-		# ensure the frame was successfully encoded
-		if not flag:
-			continue
+			# ensure the frame was successfully encoded
+			if not flag:
+				continue
 
 		# yield the output frame in the byte format
 		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
@@ -104,7 +106,7 @@ class RCDriverNNOnly(object):
 		stop_sign_active = True
 		stream_bytes = b' '
 
-		global outputFrame
+		global outputFrame, lock
 
 		try:
 			# stream video frames one by one
@@ -194,8 +196,8 @@ class RCDriverNNOnly(object):
 						label = str(label)
 						self.sendPrediction(label)
 
-					
-					outputFrame = image.copy()
+					with lock:
+						outputFrame = image.copy()
 						
 					if cv2.waitKey(1) & 0xFF == ord('q'):
 						print("Car stopped")
