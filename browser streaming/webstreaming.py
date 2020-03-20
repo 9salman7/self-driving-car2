@@ -57,6 +57,18 @@ def video_feed():
 	return Response(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
 
+@app.get('/speechRec')
+def speechRec():
+	r = sr.Recognizer()
+	with sr.Microphone() as source:
+		print("Speak Anything: ")
+		audio = r.listen(source)
+		try:
+			text = r.recognize_google(audio)
+			print("You said : {}".format(text))
+		except:
+			print("Could not recognize")
+
 class RCDriverNNOnly(object):
 
 	def __init__(self, host, port, model_path):

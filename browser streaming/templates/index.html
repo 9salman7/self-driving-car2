@@ -22,6 +22,8 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+  <script type=text/javascript> $(function() { $("#speechRec").click(function (event) { $.getJSON('/speechRec', { },
+    function(data) { }); return false; }); }); </script> 
 </head>
 
 <body>
@@ -127,6 +129,7 @@
         <br><br><br>
         <input type="submit" class="btn btn-primary btn-lg" name="startCar" value="Start Car">
         <input type="submit" class="btn btn-primary btn-lg" name="stopCar" value="Stop Car">
+        <input type="submit" class="btn btn-primary btn-lg" id = "speechRec" value = "Speech Recognition" />
       </div>
     </section>
 
