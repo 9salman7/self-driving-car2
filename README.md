@@ -1,4 +1,7 @@
+---
 
+
+---
 
 <h2 id="infernus">Infernus</h2>
 <h3 id="self-driving-car-built-using-opencv-tensorflow-and-arduino">Self Driving Car built using OpenCV, Tensorflow and Arduino</h3>
@@ -27,4 +30,5 @@
      <code>rc_driver_keras2.py</code>: code to be run on Pi<br>
      <code>rc_keras5.py</code>: receive data from Raspberry Pi and drive the car based on model prediction<br>
      <code>rc_driver_nn_only.py</code>: simplified  <code>rc_driver.py</code>  without object detection</p>
+<p><code>kerasInfernus.ipynb</code>: Jupyter notebook for training Tensorflow model</p>
 
