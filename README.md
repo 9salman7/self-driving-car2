@@ -1,7 +1,4 @@
----
 
-
----
 
 <h2 id="infernus">Infernus</h2>
 <h3 id="self-driving-car-built-using-opencv-tensorflow-and-arduino">Self Driving Car built using OpenCV, Tensorflow and Arduino</h3>
