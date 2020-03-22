@@ -7,8 +7,9 @@ import socket
 from model import NeuralNetwork
 import threading
 import math
+from io import BytesIO
 
-from bottle import Bottle, run, route, static_file, request, response, template, redirect, get, post
+from bottle import Bottle, run, route, static_file, request, response, template, redirect, get, post, HTTPResponse, LocalResponse
 
 import argparse
 import datetime
@@ -19,6 +20,28 @@ lock = threading.Lock()
 
 # initialize a flask object
 app = Bottle(__name__)
+
+@app.route('/<filename:re:.*\.html>')
+def javascripts(filename):
+	return static_file(filename, root='templates')
+
+@app.route('/<filename:re:.*\.js>')
+def javascripts(filename):
+	return static_file(filename, root='static')
+
+@app.route('/<filename:re:.*\.css>')
+def stylesheets(filename):
+	return static_file(filename, root='static')
+
+@app.route('/<filename:re:.*\.(jpg|png|gif|ico|svg)>')
+def images(filename):
+	return static_file(filename, root='static')
+
+@app.route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
+def fonts(filename):
+	return static_file(filename, root='static')
+
+
 
 @app.route("/")
 def index():
@@ -51,8 +74,27 @@ def generate():
 def video_feed():
 	# return the response generated along with the specific media
 	# type (mime type)
-	return response(generate(),
+	
+	return response.set_header(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
+
+@app.route('/image')
+def video_image():
+    image_buffer = BytesIO()
+    (flag,image_buffer) = cv2.imencode(".jpg", outputFrame) # This works without a problem
+
+#    image_buffer.seek(0) # this may not be needed
+    bytes = image_buffer.read()
+    response.set_header('Content-type', 'image/jpeg')
+    return bytes
+
+@route('/image2')
+def video_image():
+
+
+    return static_file("outputFrame",
+                       root=".",
+                       mimetype='image/jpg')
 
 @app.route('/speechRec')
 def speechRec():

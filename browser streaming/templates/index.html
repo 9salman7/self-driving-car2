@@ -7,23 +7,24 @@
 
   <title>Infernus</title>
   <!-- Favicons -->
-  <link href="{{url_for('static', filename='favicon.png')}}" rel="icon">
-  <link href="{{url_for('static', filename='apple-touch-icon.png')}}" rel="apple-touch-icon">
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet">
-  <link href="{{url_for('static', filename='animate.min.css')}}" rel="stylesheet">
-  <link href="{{url_for('static', filename='font-awesome.min.css')}}" rel="stylesheet">
-  <link href="{{url_for('static', filename='venobox.css')}}" rel="stylesheet">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="vendor/venobox/venobox.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  
+    <script type=text/javascript> $(function() { $("#speechRec").click(function (event) { $.getJSON('/speechRec', { },
+    function(data) { }); return false; }); }); </script>
 
-  <script type=text/javascript> $(function() { $("#speechRec").click(function (event) { $.getJSON('/speechRec', { },
-    function(data) { }); return false; }); }); </script> 
 </head>
 
 <body>
@@ -71,7 +72,7 @@
             <div class="row">
           <div class="col-lg-6 col-md-2">
             <div class="member">
-              <div class="pic"><img src="{{url_for('static', filename='infernus.jpg')}}" style='width:100%;' align="center" alt=""></div> 
+              <div class="pic"><img src="img/infernus.jpg" style='width:100%;' align="center" alt=""></div> 
             </div>
           </div>
 
@@ -110,7 +111,7 @@
         <div class="row">
           <div class="col-lg-6 col-md-6">
             <div class="member">
-              <div class="pic"><img src="{{url_for('static', filename='infernus.jpg')}}" style='width:100%;' alt=""></div>
+              <div class="pic"><img src="img/infernus.jpg" style='width:100%;' alt=""></div>
             </div>
           </div>
         </div>
@@ -125,7 +126,7 @@
         <div class="section-header">
           <h3 class="section-title">Camera Stream</h3>
         </div>
-        <img src="{{ url_for('video_feed') }}" class="center" style='width:100%;'>
+        <!--<img src="/video_feed" class="center" style='width:100%;'>-->
         <br><br><br>
         <input type="submit" class="btn btn-primary btn-lg" name="startCar" value="Start Car">
         <input type="submit" class="btn btn-primary btn-lg" name="stopCar" value="Stop Car">
@@ -144,7 +145,7 @@
         <div class="row">
           <div class="col-lg-3 col-md-6">
             <div class="member">
-              <div class="pic"><img src="{{url_for('static', filename='salman.jpg')}}" style='width:100%;' align="center" alt=""></div> 
+              <div class="pic"><img src="img/salman.jpg" alt=""></div>
               <h4>Mohamed Salman</h4>
               <div class="social">
                 <a href="https://www.github.com/9salman7"><i class="fa fa-github"></i></a>
@@ -155,7 +156,7 @@
 
           <div class="col-lg-3 col-md-6">
             <div class="member">
-             <div class="pic"><img src="{{url_for('static', filename='manoh.jpg')}}" style='width:100%;' align="center" alt=""></div> 
+              <div class="pic"><img src="img/manoh.jpg" alt=""></div>
               <h4>R Manoj</h4>
               <div class="social">
                 <a href=""><i class="fa fa-github"></i></a>
@@ -166,7 +167,7 @@
 
           <div class="col-lg-3 col-md-6">
             <div class="member">
-              <div class="pic"><img src="/static/rudresh.jpg" style='width:100%;' align="center" alt=""></div> 
+              <div class="pic"><img src="img/rudresh.jpg" alt=""></div>
               <h4>Rudresh M</h4>
               <div class="social">
                 <a href=""><i class="fa fa-github"></i></a>
@@ -177,7 +178,7 @@
 
           <div class="col-lg-3 col-md-6">
             <div class="member">
-              <div class="pic"><img src="{{url_for('static', filename='jaffar.jpg')}}" alt=""></div>
+              <div class="pic"><img src="img/jaffar.jpg" alt=""></div>
               <h4>Mohamed Jaffar</h4>
               <div class="social">
                 <a href=""><i class="fa fa-github"></i></a>
@@ -192,16 +193,16 @@
 
 
   <!-- Vendor JS Files -->
-  <script src="{{url_for('static', filename='jquery.min.js')}}"></script>
-  <script src="{{url_for('static', filename='bootstrap.bundle.min.js')}}"></script>
-  <script src="{{url_for('static', filename='jquery.easing.min.js')}}"></script>
-  <script src="{{url_for('static', filename='validate.js')}}"></script>
-  <script src="{{url_for('static', filename='counterup.min.js')}}"></script>
-  <script src="{{url_for('static', filename='wow.min.js')}}"></script>
-  <script src="{{url_for('static', filename='jquery.waypoints.min.js')}}"></script>
-  <script src="{{url_for('static', filename='superfish.min.js')}}"></script>
-  <script src="{{url_for('static', filename='hoverIntent.js')}}"></script>
-  <script src="{{url_for('static', filename='venobox.min.js')}}"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="vendor/php-email-form/validate.js"></script>
+  <script src="vendor/counterup/counterup.min.js"></script>
+  <script src="vendor/wow/wow.min.js"></script>
+  <script src="vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="vendor/superfish/superfish.min.js"></script>
+  <script src="vendor/hoverIntent/hoverIntent.js"></script>
+  <script src="vendor/venobox/venobox.min.js"></script>
 
 </body>
 

@@ -11,6 +11,8 @@ import math
 from flask import Response
 from flask import Flask
 from flask import render_template
+from flask import send_from_directory
+
 import argparse
 import datetime
 import time
@@ -23,33 +25,18 @@ lock = threading.Lock()
 # initialize a flask object
 app = Flask(__name__)
 
-"""@app.route('/<filename:re:.*\.html>')
-def javascripts(filename):
-	return static_file(filename, root='templates')
+@app.route('/css/<path:path>')
+def send_css(path):
+    return send_from_directory('css', path)
 
-@app.route('/<filename:re:.*\.js>')
-def javascripts(filename):
-	return static_file(filename, root='assets')
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory('js', path)
 
-@app.route('/<filename:re:.*\.css>')
-def stylesheets(filename):
-	return static_file(filename, root='assets')
+@app.route('/img/<path:path>')
+def send_img(path):
+    return send_from_directory('img', path)
 
-@app.route('/<filename:re:.*\.(jpg|png|gif|ico|svg)>')
-def images(filename):
-	return static_file(filename, root='assets')
-
-@app.route('/<filename:re:.*\.(eot|ttf|woff|svg)>')
-def fonts(filename):
-	return static_file(filename, root='assets')
-
-@app.route('/<filename:re:.*\.html>')
-def javascripts(filename):
-	return static_file(filename, root='assets')
-
-@app.route('/<filename:re:.*\.pdf>')
-def pdfs(filename):
-	return static_file(filename, root='assets')"""
 
 @app.route("/")
 def index():
