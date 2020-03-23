@@ -78,25 +78,7 @@ def video_feed():
 	return response.set_header(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
 
-@app.route('/image')
-def video_image():
-    image_buffer = BytesIO()
-    (flag,image_buffer) = cv2.imencode(".jpg", outputFrame) # This works without a problem
-
-#    image_buffer.seek(0) # this may not be needed
-    bytes = image_buffer.read()
-    response.set_header('Content-type', 'image/jpeg')
-    return bytes
-
-@route('/image2')
-def video_image():
-
-
-    return static_file("outputFrame",
-                       root=".",
-                       mimetype='image/jpg')
-
-@app.route('/speechRec')
+@app.get('/speechRec')
 def speechRec():
 	r = sr.Recognizer()
 	with sr.Microphone() as source:
