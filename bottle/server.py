@@ -75,8 +75,15 @@ def video_feed():
 	# return the response generated along with the specific media
 	# type (mime type)
 	
-	return response.set_header(generate(),
+	return response(generate(),
 		mimetype = "multipart/x-mixed-replace; boundary=frame")
+
+@app.route("/image")
+def image():
+	(flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+	response.content_type= "image/jpeg"
+	encodedImage = b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n'
+	return encodedImage
 
 @app.get('/speechRec')
 def speechRec():
