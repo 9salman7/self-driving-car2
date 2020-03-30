@@ -87,7 +87,8 @@ class HomeScreen(Screen):
         stream_bytes = b' '
         try:
             # stream video frames one by one
-            while True:     
+            while True:  
+                self.ids.vid.reload()   
                 stream_bytes += self.connection.read(1024)
                 first = stream_bytes.find(b'\xff\xd8')
                 last = stream_bytes.find(b'\xff\xd9')
@@ -118,6 +119,7 @@ class HomeScreen(Screen):
                     
                     cv2.imshow('RPi Camera Stream', image)
                     cv2.waitKey(1)
+                    #cv2.imwrite("camera.jpg", image)
 
                     # reshape image
                     image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
@@ -171,6 +173,8 @@ class HomeScreen(Screen):
                         label = self.prediction[0]
                         label = str(label)
                         self.sendPrediction(label)
+
+                    cv2.imwrite("camera.jpg", image)
                         
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("Car stopped")
