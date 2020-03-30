@@ -24,6 +24,13 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import Snackbar
 from kivymd.toast import toast
 
+import cv2
+import numpy as np
+import socket
+from model import NeuralNetwork
+import threading
+import math
+
 Window.softinput_mode = "below_target"  # resize to accomodate keyboard
 Window.keyboard_anim_args = {'d': 0.5, 't': 'in_out_quart'}
 
@@ -43,7 +50,7 @@ class HomeScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.server_socket = socket.socket()
-        self.server_socket.bind((host, port))
+        self.server_socket.bind(("192.168.0.100", 1234))
         self.server_socket.listen(0)
 
         # accept a single connection
@@ -88,7 +95,7 @@ class HomeScreen(Screen):
         try:
             # stream video frames one by one
             while True:  
-                self.ids.vid.reload()   
+                #self.ids.vid.reload()   
                 stream_bytes += self.connection.read(1024)
                 first = stream_bytes.find(b'\xff\xd8')
                 last = stream_bytes.find(b'\xff\xd9')
@@ -117,9 +124,11 @@ class HomeScreen(Screen):
                         self.d_stop_sign = d1
                         self.d_light = d2
                     
-                    cv2.imshow('RPi Camera Stream', image)
-                    cv2.waitKey(1)
+                    #cv2.imshow('RPi Camera Stream', image)
+                    #cv2.waitKey(1)
                     #cv2.imwrite("camera.jpg", image)
+                    cv2.imwrite("camera.jpg", image)
+                    self.ids.vid.reload()
 
                     # reshape image
                     image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
@@ -174,7 +183,7 @@ class HomeScreen(Screen):
                         label = str(label)
                         self.sendPrediction(label)
 
-                    cv2.imwrite("camera.jpg", image)
+                    
                         
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         print("Car stopped")
@@ -318,7 +327,7 @@ class Car(MDApp):
         pass
 
     def build(self):
-        print('hello')
+        #print('hello')
         self.bind(on_start=self.post_build_init)
         self.sm.add_widget(Factory.LoginScreen())
         self.sm.add_widget(Factory.HomeScreen())
