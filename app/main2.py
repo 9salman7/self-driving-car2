@@ -27,9 +27,6 @@ from kivymd.toast import toast
 import cv2
 import numpy as np
 import socket
-from model import NeuralNetwork
-import threading
-import math
 
 Window.softinput_mode = "below_target"  # resize to accomodate keyboard
 Window.keyboard_anim_args = {'d': 0.5, 't': 'in_out_quart'}

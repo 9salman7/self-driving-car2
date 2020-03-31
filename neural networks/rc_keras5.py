@@ -130,6 +130,7 @@ class RCDriverNNOnly(object):
 
 					else:
 						stop_sign_active = True
+						stop_flag = False
 
 						# neural network makes prediction                   
 						self.prediction = self.nn.predictKeras(image_array)
