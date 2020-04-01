@@ -85,6 +85,7 @@ class RCDriverNNOnly(object):
 					
 					cv2.imshow('RPi Camera Stream', image)
 					cv2.waitKey(1)
+					cv2.imwrite("camera.jpg", image)
 
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)

@@ -17,6 +17,8 @@ from kivymd.uix.behaviors import CircularRippleBehavior
 from kivymd.toast.kivytoast.kivytoast import toast
 from kivy.properties import ObjectProperty
 from kivy.properties import StringProperty
+from kivy.uix.scrollview import ScrollView
+
 
 from kivymd.app import MDApp
 from kivymd.uix.bottomnavigation import MDBottomNavigationItem
@@ -24,9 +26,12 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.snackbar import Snackbar
 from kivymd.toast import toast
 
+from kivy.uix.image import Image
+from kivy.clock import Clock
+from kivy.graphics.texture import Texture
+
 import cv2
-import numpy as np
-import socket
+
 
 Window.softinput_mode = "below_target"  # resize to accomodate keyboard
 Window.keyboard_anim_args = {'d': 0.5, 't': 'in_out_quart'}
@@ -36,6 +41,9 @@ Builder.load_string("""
 #:include kv/login.kv
 #:include kv/home.kv
 #:include kv/explore.kv
+
+#:import Snackbar kivymd.uix.snackbar.Snackbar
+
 """)
 
 
@@ -46,38 +54,18 @@ class ExploreScreen(Screen):
 class HomeScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.server_socket = socket.socket()
-        self.server_socket.bind(("192.168.0.100", 1235))
-        self.server_socket.listen(0)
 
-        # accept a single connection
-        self.connection = self.server_socket.accept()[0].makefile('rb')
-        
-    def drive(self):
-        stream_bytes = b' '
-        try:
-            # stream video frames one by one
-            while True:  
-                #self.ids.vid.reload()   
-                stream_bytes += self.connection.read(1024)
-                first = stream_bytes.find(b'\xff\xd8')
-                last = stream_bytes.find(b'\xff\xd9')
-
-                if first != -1 and last != -1:
-                    jpg = stream_bytes[first:last + 2]
-                    stream_bytes = stream_bytes[last + 2:]
-                    image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
-                    Clock.schedule_interval(self.update, 1.0/33.0)
-
-        finally:
-            self.connection.close()
-            self.server_socket.close()
+    def build(self):
+        #self.capture = cv2.VideoCapture(0)
+        #cv2.namedWindow("CV2 Image",cv2.WINDOW_NORMAL)
+        #cv2.resizeWindow("CV2 Image", 380,200)
+        Clock.schedule_interval(self.update, 1.0/33.0)
 
     def update(self, dt):
         self.ids.vid.reload()
         # display image from cam in opencv window
-        ret, frame = self.capture.read()
-        cv2.imwrite("camera.jpg",frame)
+        #ret, frame = self.capture.read()
+        #cv2.imwrite("camera.jpg",frame)
 
 class Car(MDApp):
     def __init__(self, **kwargs):
@@ -148,7 +136,6 @@ class Car(MDApp):
         pass
 
     def build(self):
-        #print('hello')
         self.bind(on_start=self.post_build_init)
         self.sm.add_widget(Factory.LoginScreen())
         self.sm.add_widget(Factory.HomeScreen())
