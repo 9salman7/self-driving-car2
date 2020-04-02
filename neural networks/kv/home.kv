@@ -2,7 +2,7 @@
 <HomeScreen>:
     name: "home_screen"
     on_enter:
-        root.build()
+        img=root.build()
 
     MDToolbar:
         id: toolbar
@@ -40,6 +40,38 @@
                     id: vid
                     source: "camera.jpg"
 
+            BoxLayout:
+                orientation: "vertical"
+                MDFillRoundFlatButton:
+                    text: "Start Car"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        root.carControl("start")
+                MDRoundFlatButton:
+                    text: "Stop Car"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        root.carControl("stop")
+                MDFillRoundFlatButton:
+                    text: "Speech Recognition"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        root.speechRec()
+                MDRoundFlatButton:
+                    text: "Exit"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        app.manage_screens("login_screen", "add")
+                        app.change_screen("login_screen")
+
         MDBottomNavigationItem:
             name: "team"
             text: "Team"
@@ -65,7 +97,7 @@
                         height: "1dp"
 
                     Image:
-                        source: "images/salman.jpg"
+                        source: "salman.jpg"
 
                 MDCard:
                     orientation: "vertical"
@@ -87,7 +119,7 @@
                     #MDLabel:
                     #    text: "Pi Camera Stream"
                     Image:
-                        source: "images/manoj.jpeg"
+                        source: "manoj.jpeg"
 
                 MDCard:
                     orientation: "vertical"
@@ -109,7 +141,7 @@
                     #MDLabel:
                     #    text: "Pi Camera Stream"
                     Image:
-                        source: "images/rudresh.jpeg"
+                        source: "rudresh.jpeg"
 
                 MDCard:
                     orientation: "vertical"
@@ -131,4 +163,4 @@
                     #MDLabel:
                     #    text: "Pi Camera Stream"
                     Image:
-                        source: "images/jaffar.jpeg"
+                        source: "jaffar.jpeg"
