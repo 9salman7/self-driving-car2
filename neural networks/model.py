@@ -18,6 +18,8 @@ from keras.layers import Flatten, Dense, Dropout, Lambda
 from keras.models import load_model
 from keras import backend as K
 
+import pickle
+
 def load_data(input_size, path):
     print("Loading training data...")
     start = time.time()
@@ -106,6 +108,14 @@ class NeuralNetwork(object):
         self.modelKeras = load_model('model_test.h5')
         print("Keras model loaded")
 
+    def load_modelSign(self, path):
+        if not os.path.exists(path):
+            print("Model does not exist, exit")
+            sys.exit()
+        pickle_in=open("model_trained.p","rb")  ## rb = READ BYTE
+        self.modelSign=pickle.load(pickle_in)
+        print("Road sign model loaded")
+
     def predict(self, X):
         resp = None
         try:
@@ -122,3 +132,9 @@ class NeuralNetwork(object):
         #y_true = np.argmax(y_test, -1)
         #print(y_pred)
         return y_pred
+
+    def predictSign(self, img):
+        predictions = model.predict(img)
+        classIndex = model.predict_classes(img)
+        probabilityValue =np.amax(predictions)
+        return classIndex, probabilityValue  
