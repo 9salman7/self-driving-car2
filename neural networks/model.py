@@ -112,7 +112,7 @@ class NeuralNetwork(object):
         if not os.path.exists(path):
             print("Model does not exist, exit")
             sys.exit()
-        pickle_in=open("model_trained.p","rb")  ## rb = READ BYTE
+        pickle_in=open("sign_model.p","rb")  ## rb = READ BYTE
         self.modelSign=pickle.load(pickle_in)
         print("Road sign model loaded")
 
