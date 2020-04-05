@@ -58,7 +58,7 @@ class HomeScreen(Screen):
         super().__init__(**kwargs)
 
     def build(self):
-        self.capture = cv2.VideoCapture(0)
+        #self.capture = cv2.VideoCapture(0)
         #cv2.namedWindow("CV2 Image",cv2.WINDOW_NORMAL)
         #cv2.resizeWindow("CV2 Image", 380,200)
         Clock.schedule_interval(self.update, 1.0/33.0)
@@ -66,8 +66,8 @@ class HomeScreen(Screen):
     def update(self, dt):
         self.ids.vid.reload()
         # display image from cam in opencv window
-        ret, frame = self.capture.read()
-        cv2.imwrite("camera.jpg",frame)
+        #ret, frame = self.capture.read()
+        #cv2.imwrite("camera.jpg",frame)
 
     def speechRec(self):
         r = sr.Recognizer()
