@@ -5,6 +5,8 @@ from model import NeuralNetwork
 import threading
 import math
 
+sensor_data = None
+
 class RCDriverNNOnly(object):
 
 	def __init__(self, host, port, model_path):
@@ -17,7 +19,13 @@ class RCDriverNNOnly(object):
 		self.connection = self.server_socket.accept()[0].makefile('rb')
 		
 		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.client_socket.connect(('192.168.0.101', 1234))   #pi
+		self.client_socket.connect(('192.168.0.101', 1234))   #pi for camera
+
+       	self.server_socket2 = socket.socket()
+        self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.server_socket2.bind(("192.168.0.101", 4321))	  #pi for ultrasonic sensor
+        self.server_socket2.listen(0)
+        self.connection2, self.client_address2 = self.server_socket2.accept()
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
@@ -34,6 +42,8 @@ class RCDriverNNOnly(object):
 		self.d_stop_light_thresh = 70
 		self.d_stop_sign = self.d_stop_light_thresh    
 		self.d_light = self.d_stop_light_thresh
+
+		self.d_sensor_thresh = 30
 		
 		self.stop_start = 0  # start time when stop at the stop sign
 		self.stop_finish = 0
@@ -49,12 +59,18 @@ class RCDriverNNOnly(object):
 		self.ay = 332.262498472             # from camera matrix
 
 	def drive(self):
+		global sensor_data
 		stop_flag = False
 		stop_sign_active = True
 		stream_bytes = b' '
 		try:
+			start = time.time()
 			# stream video frames one by one
-			while True:		
+			while True:
+				sensor_data = float(self.connection2.recv(1024))
+				sensor_data = round((sensor_data), 1)
+                print("Distance: %0.1f cm" % sensor_data)
+
 				stream_bytes += self.connection.read(1024)
 				first = stream_bytes.find(b'\xff\xd8')
 				last = stream_bytes.find(b'\xff\xd9')
@@ -89,8 +105,14 @@ class RCDriverNNOnly(object):
 
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
+
+                    if sensor_data and int(sensor_data) < self.d_sensor_thresh:
+		                print("Stop, obstacle in front")
+		                label = "3"
+						self.sendPrediction(label)
+		                sensor_data = None
 					
-					if 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
+					elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
 						print("Stop sign ahead")
 						label = "3"
 						self.sendPrediction(label)

@@ -8,7 +8,7 @@ GPIO.setwarnings(False)
 
 # create a socket and bind socket to the host
 client_socket = socket(AF_INET, SOCK_STREAM)
-client_socket.connect(('192.168.1.100', 8002))
+client_socket.connect(('192.168.0.100', 4321))   #laptop
 
 def measure():
     """
