@@ -34,8 +34,8 @@ def measure():
 GPIO.setmode(GPIO.BCM)
 
 # define pi GPIO
-GPIO_TRIGGER = 19
-GPIO_ECHO    = 26
+GPIO_TRIGGER = 21
+GPIO_ECHO    = 20
 
 # output pin: Trigger
 GPIO.setup(GPIO_TRIGGER,GPIO.OUT)
