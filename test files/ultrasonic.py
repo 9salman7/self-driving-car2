@@ -15,14 +15,12 @@ GPIO.setup(GPIO_ECHO, GPIO.IN)
  
 def distance():
     # set Trigger to HIGH
-    print("hello")
+
     GPIO.output(GPIO_TRIGGER, GPIO.HIGH)
  
     # set Trigger after 0.01ms to LOW
     time.sleep(0.00001)
     GPIO.output(GPIO_TRIGGER, GPIO.LOW)
-    print("hello2")
- 
     StartTime = time.time()
     StopTime = time.time()
  
@@ -33,8 +31,6 @@ def distance():
     # save time of arrival
     while GPIO.input(GPIO_ECHO) == 1:
         StopTime = time.time()
-
-    print("hello3")
  
     # time difference between start and arrival
     TimeElapsed = StopTime - StartTime
