@@ -107,12 +107,18 @@ class RCDriverNNOnly(object):
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
 
                     if sensor_data and int(sensor_data) < self.d_sensor_thresh:
+                    	#f = open("status.txt", "w")
+						#f.write("Stop, obstacle in front")
+						#f.close()
 		                print("Stop, obstacle in front")
 		                label = "3"
 						self.sendPrediction(label)
 		                sensor_data = None
 					
 					elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
+						#f = open("status.txt", "w")
+						#f.write("Stop sign ahead")
+						#f.close()	
 						print("Stop sign ahead")
 						label = "3"
 						self.sendPrediction(label)
@@ -129,6 +135,9 @@ class RCDriverNNOnly(object):
 
 						# 5 seconds later, continue driving
 						if self.stop_time > 5:
+							#f = open("status.txt", "w")
+							#f.write("Waited for 5 seconds")
+							#f.close()
 							print("Waited for 5 seconds")
 							stop_flag = False
 							stop_sign_active = False
@@ -152,6 +161,9 @@ class RCDriverNNOnly(object):
 						self.yellow_light = False
 
 					else:
+						#f = open("status.txt", "w")
+						#f.write("Car moving normally")
+						#f.close()
 						# neural network makes prediction                   
 						self.prediction = self.nn.predictKeras(image_array)
 						#print("Keras prediction: ",self.prediction)
@@ -178,6 +190,23 @@ class RCDriverNNOnly(object):
 			self.server_socket.close()
 
 	def sendPrediction(self, pred):
+		#if pred == "0":
+			#f = open("status.txt", "w")
+			#f.write("Car moving left")
+			#f.close()
+		#elif pred == "1":
+			#f = open("status.txt", "w")
+			#f.write("Car moving right")
+			#f.close()
+		#elif pred == "2":
+			#f = open("status.txt", "w")
+			#f.write("Car moving forward")
+			#f.close()		
+		#else:
+			#f = open("status.txt", "w")
+			#f.write("Car stopped")
+			#f.close()
+		
 		p=pred+ ' '
 		p = p.encode('utf-8')
 		self.client_socket.send(p)

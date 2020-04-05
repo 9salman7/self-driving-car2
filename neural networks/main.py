@@ -64,6 +64,10 @@ class HomeScreen(Screen):
         Clock.schedule_interval(self.update, 1.0/33.0)
 
     def update(self, dt):
+        f = open("status.txt", "r")
+        self.status = f.read()
+        self.ids.vid.reload()
+
         self.ids.vid.reload()
         # display image from cam in opencv window
         #ret, frame = self.capture.read()
