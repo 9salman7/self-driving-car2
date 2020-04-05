@@ -12,9 +12,6 @@ while True:
 
           GPIO.output(PIN_TRIGGER, GPIO.LOW)
 
-          print "Waiting for sensor to settle"
-
-          time.sleep(2)
 
           print "Calculating distance"
 
