@@ -42,5 +42,5 @@ class VideoStreamingTest(object):
 
 if __name__ == '__main__':
     # host, port
-    h, p = "192.168.0.105", 1234
+    h, p = "0.0.0.0", 1234
     VideoStreamingTest(h, p)

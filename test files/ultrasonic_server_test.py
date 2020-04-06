@@ -33,5 +33,5 @@ class SensorStreamingTest(object):
 
 
 if __name__ == '__main__':
-    h, p = "192.168.0.101", 4321      #pi
+    h, p = "0.0.0.0", 5678      #pi
     SensorStreamingTest(h, p)
