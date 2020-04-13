@@ -1,4 +1,4 @@
-#ultrasonic and car status 
+#ultrasonic, car status and traffic light and init/create function
 
 import cv2
 import numpy as np
@@ -10,9 +10,11 @@ import time
 
 sensor_data = None
 
-class RCDriverNNOnly(object):
+class RCKeras(object):
+	def __init__(self):
+		self.inst = None
 
-	def __init__(self, host, port, model_path):
+	def create(self, host, port, model_path):
 
 		self.server_socket = socket.socket()
 		self.server_socket.bind((host, port))
@@ -40,8 +42,7 @@ class RCDriverNNOnly(object):
 		#self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"C:/Users/My\ PC/Anaconda3/envs/tf/Lib/site-packages/cv2/data/stop_sign.xml")
 		#self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"D:/Downloads/self-driving-car2/neural networks/stop_sign.xml")
 		self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"stop_sign.xml")
-		self.traffic_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "traffic_light.xml")	
-
+		
 		self.d_stop_light_thresh = 70
 		self.d_stop_sign = self.d_stop_light_thresh    
 		self.d_light = self.d_stop_light_thresh
@@ -60,6 +61,21 @@ class RCDriverNNOnly(object):
 		self.alpha = 8.0 * math.pi / 180    # degree measured manually
 		self.v0 = 119.865631204             # from camera matrix
 		self.ay = 332.262498472             # from camera matrix
+
+		self.orb = cv2.ORB_create(nfeatures=1500)
+		self.bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+
+	    self.rTrainColor=cv2.imread('redlight.jpg') 
+	    self.rTrainGray = cv2.cvtColor(self.rTrainColor, cv2.COLOR_BGR2GRAY)
+
+	    self.gTrainColor=cv2.imread('greenlight.jpg') 
+	    self.gTrainGray = cv2.cvtColor(self.gTrainColor, cv2.COLOR_BGR2GRAY)
+
+	    self.rkpTrain = self.orb.detect(self.rTrainGray,None)
+	    self.rkpTrain, self.rdesTrain = self.orb.compute(self.rTrainGray, self.rkpTrain)
+
+	    self.gkpTrain = self.orb.detect(self.gTrainGray,None)
+	    self.gkpTrain, self.gdesTrain = self.orb.compute(self.gTrainGray, self.gkpTrain)
 
 	def drive(self):
 		global sensor_data
@@ -93,21 +109,43 @@ class RCDriverNNOnly(object):
 
 					# object detection
 					v_param1 = self.detect(self.stop_cascade, gray, image)
-					v_param2 = self.detect(self.traffic_cascade, gray, image)
-
+			
 					# distance measurement
-					if v_param1 > 0 or v_param2 > 0:
+					if v_param1 >:
 						d1 = self.calculate(v_param1, self.h1, 300, image)
-						d2 = self.calculate(v_param2, self.h2, 100, image)
 						self.d_stop_sign = d1
-						self.d_light = d2
-					
+						
 					cv2.imshow('RPi Camera Stream', image)
 					cv2.waitKey(1)
 					cv2.imwrite("camera.jpg", image)
 
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
+
+					#traffic light detection
+					kpCam = self.orb.detect(gray,None)
+			        kpCam, desCam = self.orb.compute(gray, kpCam)
+
+			        rmatches = self.bf.match(desCam, self.rdesTrain)
+			        rdist = [rm.distance for rm in rmatches]
+			        rthres_dist = (sum(rdist) / len(rdist)) * 0.5
+			        rmatches = [rm for rm in rmatches if rm.distance < rthres_dist]
+
+			        gmatches = self.bf.match(desCam, self.gdesTrain)
+			        gdist = [gm.distance for gm in gmatches]
+			        gthres_dist = (sum(gdist) / len(gdist)) * 0.5
+			        gmatches = [gm for gm in gmatches if gm.distance < gthres_dist]
+
+			        if len(rmatches)>4 or len(gmatches)>4:
+			            if len(rmatches)>len(gmatches) and self.red_light == False:
+			                print("Red light ahead")
+			                self.red_light = True
+			                self.green_light = False
+			                
+			            elif len(rmatches)<len(gmatches) and self.green_light == False:
+			                print("Green light ahead")
+			                self.red_light = False
+			                self.green_light = True
 
                     if sensor_data and int(sensor_data) < self.d_sensor_thresh:
                     	f = open("status.txt", "w")
@@ -144,24 +182,17 @@ class RCDriverNNOnly(object):
 							stop_flag = False
 							stop_sign_active = False
 
-					elif 0 < self.d_light < self.d_stop_light_thresh:
+					elif self.red_light == True or self.green_light == True:
 						# print("Traffic light ahead")
-						if self.red_light:
-							print("Red light")
+						if self.red_light == True:
 							label = "3"
 							self.sendPrediction(label)
-						elif self.green_light:
-							print("Green light")
-							pass
-						elif self.yellow_light:
-							print("Yellow light")
+						elif self.green_light == True:
 							pass
 
-						self.d_light = self.d_stop_light_thresh
-						self.red_light = False
-						self.green_light = False
-						self.yellow_light = False
-
+						#self.red_light = False
+						#self.green_light = False
+						
 					else:
 						#f = open("status.txt", "w")
 						#f.write("Car moving normally")
@@ -245,32 +276,6 @@ class RCDriverNNOnly(object):
 			if width / height == 1:
 				cv2.putText(image, 'STOP', (x_pos, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
-			else:
-				cv2.putText(image, 'Traffic Light', (x_pos + 5, y_pos - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-
-				roi = gray_image[y_pos + 10:y_pos + height - 10, x_pos + 10:x_pos + width - 10]
-				mask = cv2.GaussianBlur(roi, (25, 25), 0)
-				(minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(mask)
-
-				# check if light is on
-				if maxVal - minVal > threshold:
-					cv2.circle(roi, maxLoc, 5, (255, 0, 0), 2)
-
-					# Red light
-					if 1.0 / 8 * (height - 30) < maxLoc[1] < 4.0 / 8 * (height - 30):
-						cv2.putText(image, 'Red', (x_pos + 5, y_pos - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-						self.red_light = True
-
-					# Green light
-					elif 5.5 / 8 * (height - 30) < maxLoc[1] < height - 30:
-						cv2.putText(image, 'Green', (x_pos + 5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),2)
-						self.green_light = True
-
-					# yellow light
-					elif 4.0/8*(height-30) < maxLoc[1] < 5.5/8*(height-30):
-						cv2.putText(image, 'Yellow', (x_pos+5, y_pos - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
-						self.yellow_light = True
-
 		return v
 
 if __name__ == '__main__':
@@ -280,8 +285,10 @@ if __name__ == '__main__':
 	# model path
 	path = "model_test.h5"
   
-	rc = RCDriverNNOnly(h, p, path)
+	rc = RCKeras()
+	rc.create(h, p, path)
 	rc.drive()
+
 
 
 

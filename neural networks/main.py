@@ -34,6 +34,8 @@ import PIL
 import speech_recognition as sr
 import cv2
 
+from rc_keras7 import RCKeras
+
 
 Window.softinput_mode = "below_target"  # resize to accomodate keyboard
 Window.keyboard_anim_args = {'d': 0.5, 't': 'in_out_quart'}
@@ -52,6 +54,7 @@ Builder.load_string("""
 class ExploreScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.rc = RCKeras()
     
 class HomeScreen(Screen):
     def __init__(self, **kwargs):
