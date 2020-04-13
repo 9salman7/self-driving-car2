@@ -185,9 +185,11 @@ class RCKeras(object):
 					elif self.red_light == True or self.green_light == True:
 						# print("Traffic light ahead")
 						if self.red_light == True:
+							cv2.putText(image, "Red Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
 							label = "3"
 							self.sendPrediction(label)
 						elif self.green_light == True:
+				            cv2.putText(image, "Green Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2, cv2.LINE_AA)
 							pass
 
 						#self.red_light = False
