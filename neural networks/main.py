@@ -34,6 +34,8 @@ import PIL
 import speech_recognition as sr
 import cv2
 
+from playsound import playsound 
+
 from rc_keras7 import RCKeras
 
 
@@ -54,7 +56,11 @@ Builder.load_string("""
 class ExploreScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.status = ""
         self.rc = RCKeras()
+        self.stopFlag = False
+        self.redFlag = False
+        self.greenFlag = False
     
 class HomeScreen(Screen):
     def __init__(self, **kwargs):
@@ -69,9 +75,28 @@ class HomeScreen(Screen):
     def update(self, dt):
         f = open("status.txt", "r")
         self.status = f.read()
-        self.ids.vid.reload()
+
+        if self.status == "Stop sign ahead" and self.stopFlag == False:
+            self.stopFlag = True
+            playsound("detection/stop.wav")
+        elif(self.status != "Stop sign ahead"):
+            self.stopFlag = False
+
+        if self.status == "Red light ahead" and self.redFlag == False:
+            self.redFlag = True
+            playsound("detection/redlight.mp3")
+        elif(self.status != "Red light ahead"):
+            self.redFlag = False
+
+        if self.status == "Green light ahead" and self.greenFlag == False:
+            self.greenFlag = True
+            playsound("detection/greenlight.mp3")
+        elif(self.status != "Green light ahead"):
+            self.greenFlag = False
 
         self.ids.vid.reload()
+
+        self.ids.stat.text = self.status
         # display image from cam in opencv window
         #ret, frame = self.capture.read()
         #cv2.imwrite("camera.jpg",frame)

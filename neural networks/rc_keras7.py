@@ -26,11 +26,11 @@ class RCKeras(object):
 		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.client_socket.connect(('192.168.0.101', 1234))   #pi for camera
 
-       	self.server_socket2 = socket.socket()
-        self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server_socket2.bind(("192.168.0.101", 4321))	  #pi for ultrasonic sensor
-        self.server_socket2.listen(0)
-        self.connection2, self.client_address2 = self.server_socket2.accept()
+		self.server_socket2 = socket.socket()
+		self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.server_socket2.bind(("192.168.0.101", 4321))	  #pi for ultrasonic sensor
+		self.server_socket2.listen(0)
+		self.connection2, self.client_address2 = self.server_socket2.accept()
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
@@ -65,17 +65,17 @@ class RCKeras(object):
 		self.orb = cv2.ORB_create(nfeatures=1500)
 		self.bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 
-	    self.rTrainColor=cv2.imread('redlight.jpg') 
-	    self.rTrainGray = cv2.cvtColor(self.rTrainColor, cv2.COLOR_BGR2GRAY)
+		self.rTrainColor=cv2.imread('detection/redlight.jpg') 
+		self.rTrainGray = cv2.cvtColor(self.rTrainColor, cv2.COLOR_BGR2GRAY)
 
-	    self.gTrainColor=cv2.imread('greenlight.jpg') 
-	    self.gTrainGray = cv2.cvtColor(self.gTrainColor, cv2.COLOR_BGR2GRAY)
+		self.gTrainColor=cv2.imread('detection/greenlight.jpg') 
+		self.gTrainGray = cv2.cvtColor(self.gTrainColor, cv2.COLOR_BGR2GRAY)
 
-	    self.rkpTrain = self.orb.detect(self.rTrainGray,None)
-	    self.rkpTrain, self.rdesTrain = self.orb.compute(self.rTrainGray, self.rkpTrain)
+		self.rkpTrain = self.orb.detect(self.rTrainGray,None)
+		self.rkpTrain, self.rdesTrain = self.orb.compute(self.rTrainGray, self.rkpTrain)
 
-	    self.gkpTrain = self.orb.detect(self.gTrainGray,None)
-	    self.gkpTrain, self.gdesTrain = self.orb.compute(self.gTrainGray, self.gkpTrain)
+		self.gkpTrain = self.orb.detect(self.gTrainGray,None)
+		self.gkpTrain, self.gdesTrain = self.orb.compute(self.gTrainGray, self.gkpTrain)
 
 	def drive(self):
 		global sensor_data
@@ -88,7 +88,7 @@ class RCKeras(object):
 			while True:
 				sensor_data = float(self.connection2.recv(1024))
 				sensor_data = round((sensor_data), 1)
-                print("Distance: %0.1f cm" % sensor_data)
+				print("Distance: %0.1f cm" % sensor_data)
 
 				stream_bytes += self.connection.read(1024)
 				first = stream_bytes.find(b'\xff\xd8')
@@ -111,7 +111,7 @@ class RCKeras(object):
 					v_param1 = self.detect(self.stop_cascade, gray, image)
 			
 					# distance measurement
-					if v_param1 >:
+					if v_param1 > 0:
 						d1 = self.calculate(v_param1, self.h1, 300, image)
 						self.d_stop_sign = d1
 						
@@ -124,37 +124,37 @@ class RCKeras(object):
 
 					#traffic light detection
 					kpCam = self.orb.detect(gray,None)
-			        kpCam, desCam = self.orb.compute(gray, kpCam)
+					kpCam, desCam = self.orb.compute(gray, kpCam)
 
-			        rmatches = self.bf.match(desCam, self.rdesTrain)
-			        rdist = [rm.distance for rm in rmatches]
-			        rthres_dist = (sum(rdist) / len(rdist)) * 0.5
-			        rmatches = [rm for rm in rmatches if rm.distance < rthres_dist]
+					rmatches = self.bf.match(desCam, self.rdesTrain)
+					rdist = [rm.distance for rm in rmatches]
+					rthres_dist = (sum(rdist) / len(rdist)) * 0.5
+					rmatches = [rm for rm in rmatches if rm.distance < rthres_dist]
 
-			        gmatches = self.bf.match(desCam, self.gdesTrain)
-			        gdist = [gm.distance for gm in gmatches]
-			        gthres_dist = (sum(gdist) / len(gdist)) * 0.5
-			        gmatches = [gm for gm in gmatches if gm.distance < gthres_dist]
+					gmatches = self.bf.match(desCam, self.gdesTrain)
+					gdist = [gm.distance for gm in gmatches]
+					gthres_dist = (sum(gdist) / len(gdist)) * 0.5
+					gmatches = [gm for gm in gmatches if gm.distance < gthres_dist]
 
-			        if len(rmatches)>4 or len(gmatches)>4:
-			            if len(rmatches)>len(gmatches) and self.red_light == False:
-			                print("Red light ahead")
-			                self.red_light = True
-			                self.green_light = False
-			                
-			            elif len(rmatches)<len(gmatches) and self.green_light == False:
-			                print("Green light ahead")
-			                self.red_light = False
-			                self.green_light = True
+					if len(rmatches)>4 or len(gmatches)>4:
+						if len(rmatches)>len(gmatches) and self.red_light == False:
+							print("Red light ahead")
+							self.red_light = True
+							self.green_light = False
+							
+						elif len(rmatches)<len(gmatches) and self.green_light == False:
+							print("Green light ahead")
+							self.red_light = False
+							self.green_light = True
 
-                    if sensor_data and int(sensor_data) < self.d_sensor_thresh:
-                    	f = open("status.txt", "w")
+					if sensor_data and int(sensor_data) < self.d_sensor_thresh:
+						f = open("status.txt", "w")
 						f.write("Stop, obstacle in front")
 						f.close()
-		                print("Stop, obstacle in front")
-		                label = "3"
+						print("Stop, obstacle in front")
+						label = "3"
 						self.sendPrediction(label)
-		                sensor_data = None
+						sensor_data = None
 					
 					elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
 						f = open("status.txt", "w")
@@ -189,7 +189,7 @@ class RCKeras(object):
 							label = "3"
 							self.sendPrediction(label)
 						elif self.green_light == True:
-				            cv2.putText(image, "Green Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2, cv2.LINE_AA)
+							cv2.putText(image, "Green Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2, cv2.LINE_AA)
 							pass
 
 						#self.red_light = False
@@ -207,13 +207,13 @@ class RCKeras(object):
 						label = str(label)
 						self.sendPrediction(label)
 
-                        self.stop_start = cv2.getTickCount()
-                        self.d_stop_sign = self.d_stop_light_thresh
+						self.stop_start = cv2.getTickCount()
+						self.d_stop_sign = self.d_stop_light_thresh
 
-                        if stop_sign_active is False:
-                            self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
-                            if self.drive_time_after_stop > 5:
-                                stop_sign_active = True
+						if stop_sign_active is False:
+							self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
+							if self.drive_time_after_stop > 5:
+								stop_sign_active = True
 						
 					if cv2.waitKey(1) & 0xFF == ord('q'):
 						print("Car stopped")
