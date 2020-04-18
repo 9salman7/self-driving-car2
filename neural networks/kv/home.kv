@@ -20,16 +20,18 @@
 
             MDCard:
                 orientation: "vertical"
-                padding: "8dp"
+                padding: "4dp"
                 size_hint: None, None
-                size: "280dp", "180dp"
-                pos_hint: {"center_x": .5, "center_y": .5}
+                size: "350dp", "350dp"
+                pos_hint: {"center_x": .5, "center_y": .65}
 
                 MDLabel:
                     text: "Camera Stream"
-                    theme_text_color: "Secondary"
+                    theme_text_color: "Primary"
                     size_hint_y: None
                     height: self.texture_size[1]
+                    halign: "center"
+
 
                 MDSeparator:
                     height: "1dp"
@@ -93,7 +95,7 @@
 
                     MDLabel:
                         text: "Mohamed Salman"
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Primary"
                         size_hint_y: None
                         height: self.texture_size[1]
                         halign: "center"
@@ -113,7 +115,7 @@
 
                     MDLabel:
                         text: "R Manoj"
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Primary"
                         size_hint_y: None
                         height: self.texture_size[1]
                         halign: "center"
@@ -135,7 +137,7 @@
 
                     MDLabel:
                         text: "Rudresh M"
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Primary"
                         size_hint_y: None
                         height: self.texture_size[1]
                         halign: "center"
@@ -157,7 +159,7 @@
 
                     MDLabel:
                         text: "Mohamed Jaffar"
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Primary"
                         size_hint_y: None
                         height: self.texture_size[1]
                         halign: "center"
@@ -169,3 +171,174 @@
                     #    text: "Pi Camera Stream"
                     Image:
                         source: "images/jaffar.jpeg"
+
+        MDBottomNavigationItem:
+            name: "specs"
+            text: "Specs"
+            icon: "settings"
+
+            BoxLayout:
+                orientation: "vertical"
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Computer: Raspberry Pi 4"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Camera: Raspberry Pi Camera v2"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                      
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Microcontroller: Arduino Uno"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Ultrasonic Sensor: HCSR04"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Motor Bridge: L298N"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Operating Systems: Raspbian OS, Windows 10/Linux"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Image Processing: OpenCV Python"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Neural Network Backend: Tensorflow"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Application UI: Kivy"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Battery: 2x 10500mAh Power Banks"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+                
+
