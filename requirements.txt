@@ -1,0 +1,8 @@
+tensorflow
+keras
+opencv-python
+sklearn
+kivy
+kimd==0.103.0
+playsound
+speechrecognition
