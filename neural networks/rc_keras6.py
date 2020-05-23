@@ -25,10 +25,19 @@ class RCDriverNNOnly(object):
 		self.client_socket.connect(('192.168.0.114', 1234))   #pi for camera
 
 		self.server_socket2 = socket.socket()
+		self.server_socket2.bind((host, 4321))
+		self.server_socket2.listen(0)
+
+		# accept a single connection
+		self.connection2 = self.server_socket2.accept()[0].makefile('rb')
+		
+
+
+		"""self.server_socket2 = socket.socket()
 		self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 		self.server_socket2.bind(("192.168.0.114", 4321))	  #pi for ultrasonic sensor
 		self.server_socket2.listen(0)
-		self.connection2, self.client_address2 = self.server_socket2.accept()
+		self.connection2, self.client_address2 = self.server_socket2.accept()"""
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
