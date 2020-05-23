@@ -8,7 +8,7 @@ GPIO.setwarnings(False)
 
 # create a socket and bind socket to the host
 client_socket = socket(AF_INET, SOCK_STREAM)
-client_socket.connect(('192.168.0.102', 5678))   #laptop
+client_socket.connect(('192.168.0.103', 5678))   #laptop
 
 def measure():
     """
@@ -34,8 +34,8 @@ def measure():
 GPIO.setmode(GPIO.BCM)
 
 # define pi GPIO
-GPIO_TRIGGER = 21
-GPIO_ECHO    = 20
+GPIO_TRIGGER = 23
+GPIO_ECHO    = 24
 
 # output pin: Trigger
 GPIO.setup(GPIO_TRIGGER,GPIO.OUT)
