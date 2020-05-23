@@ -138,13 +138,13 @@ class RCDriverNNOnly(object):
 						label = str(label)
 						self.sendPrediction(label)
 
-                        self.stop_start = cv2.getTickCount()
-                        self.d_stop_sign = self.d_stop_light_thresh
+						self.stop_start = cv2.getTickCount()
+						self.d_stop_sign = self.d_stop_light_thresh
 
-                        if stop_sign_active is False:
-                            self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
-                            if self.drive_time_after_stop > 5:
-                                stop_sign_active = True
+						if stop_sign_active is False:
+							self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
+							if self.drive_time_after_stop > 5:
+								stop_sign_active = True
 						
 					if cv2.waitKey(1) & 0xFF == ord('q'):
 						print("Car stopped")
