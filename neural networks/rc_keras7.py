@@ -24,11 +24,11 @@ class RCKeras(object):
 		self.connection = self.server_socket.accept()[0].makefile('rb')
 		
 		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.client_socket.connect(('192.168.0.101', 1234))   #pi for camera
+		self.client_socket.connect(('192.168.0.114', 1234))   #pi for camera
 
 		self.server_socket2 = socket.socket()
 		self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self.server_socket2.bind(("192.168.0.101", 4321))	  #pi for ultrasonic sensor
+		self.server_socket2.bind(("192.168.0.114", 4321))	  #pi for ultrasonic sensor
 		self.server_socket2.listen(0)
 		self.connection2, self.client_address2 = self.server_socket2.accept()
 		
@@ -282,7 +282,7 @@ class RCKeras(object):
 
 if __name__ == '__main__':
 	# host, port
-	h, p = "192.168.0.100", 1234    #laptop
+	h, p = "192.168.0.103", 1234    #laptop
 
 	# model path
 	path = "model_test.h5"
