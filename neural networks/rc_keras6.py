@@ -24,11 +24,11 @@ class RCDriverNNOnly(object):
 		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.client_socket.connect(('192.168.0.114', 1234))   #pi for camera
 
-       	self.server_socket2 = socket.socket()
-        self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.server_socket2.bind(("192.168.0.114", 4321))	  #pi for ultrasonic sensor
-        self.server_socket2.listen(0)
-        self.connection2, self.client_address2 = self.server_socket2.accept()
+		self.server_socket2 = socket.socket()
+		self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+		self.server_socket2.bind(("192.168.0.114", 4321))	  #pi for ultrasonic sensor
+		self.server_socket2.listen(0)
+		self.connection2, self.client_address2 = self.server_socket2.accept()
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
@@ -72,7 +72,7 @@ class RCDriverNNOnly(object):
 			while True:
 				sensor_data = float(self.connection2.recv(1024))
 				sensor_data = round((sensor_data), 1)
-                print("Distance: %0.1f cm" % sensor_data)
+				print("Distance: %0.1f cm" % sensor_data)
 
 				stream_bytes += self.connection.read(1024)
 				first = stream_bytes.find(b'\xff\xd8')
@@ -109,14 +109,14 @@ class RCDriverNNOnly(object):
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
 
-                    if sensor_data and int(sensor_data) < self.d_sensor_thresh:
-                    	f = open("status.txt", "w")
+					if sensor_data and int(sensor_data) < self.d_sensor_thresh:
+						f = open("status.txt", "w")
 						f.write("Stop, obstacle in front")
 						f.close()
-		                print("Stop, obstacle in front")
-		                label = "3"
+						print("Stop, obstacle in front")
+						label = "3"
 						self.sendPrediction(label)
-		                sensor_data = None
+						sensor_data = None
 					
 					elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
 						f = open("status.txt", "w")
@@ -174,13 +174,13 @@ class RCDriverNNOnly(object):
 						label = str(label)
 						self.sendPrediction(label)
 
-                        self.stop_start = cv2.getTickCount()
-                        self.d_stop_sign = self.d_stop_light_thresh
+						self.stop_start = cv2.getTickCount()
+						self.d_stop_sign = self.d_stop_light_thresh
 
-                        if stop_sign_active is False:
-                            self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
-                            if self.drive_time_after_stop > 5:
-                                stop_sign_active = True
+						if stop_sign_active is False:
+							self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
+							if self.drive_time_after_stop > 5:
+								stop_sign_active = True
 						
 					if cv2.waitKey(1) & 0xFF == ord('q'):
 						print("Car stopped")
