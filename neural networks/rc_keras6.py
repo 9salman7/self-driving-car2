@@ -70,8 +70,23 @@ class RCDriverNNOnly(object):
 		self.v0 = 119.865631204             # from camera matrix
 		self.ay = 332.262498472             # from camera matrix
 
-	def drive(self):
+	def sensor_stream(self, host, port):
 		global sensor_data
+		try:
+			start = time.time()
+
+			while True:
+				sensor_data = float(self.connection.read(1024))
+				print("Distance: %0.1f cm" % sensor_data)
+
+		finally:
+			self.connection2.close()
+			self.server_socket2.close()
+	
+	def drive(self):
+		sensor_thread = threading.Thread(target=self.sensor_stream, args=(1234, 1234))
+		sensor_thread.daemon = True
+		sensor_thread.start()
 		stop_flag = False
 		stop_sign_active = True
 		stream_bytes = b' '
@@ -79,14 +94,9 @@ class RCDriverNNOnly(object):
 			start = time.time()
 			# stream video frames one by one
 			while True:
-				sensor_data = float(self.connection2.recv(1024))
-				sensor_data = round((sensor_data), 1)
-				print("Distance: %0.1f cm" % sensor_data)
-
 				stream_bytes += self.connection.read(1024)
 				first = stream_bytes.find(b'\xff\xd8')
 				last = stream_bytes.find(b'\xff\xd9')
-
 				if first != -1 and last != -1:
 					jpg = stream_bytes[first:last + 2]
 					stream_bytes = stream_bytes[last + 2:]
