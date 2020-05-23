@@ -163,7 +163,7 @@ class RCDriverNNOnly(object):
 
 if __name__ == '__main__':
 	# host, port
-	h, p = "192.168.0.100", 1234    #laptop
+	h, p = "192.168.0.103", 1234    #laptop
 
 	# model path
 	path = "model_test.h5"
