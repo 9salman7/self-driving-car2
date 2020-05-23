@@ -17,7 +17,7 @@ class RCDriverNNOnly(object):
 		self.connection = self.server_socket.accept()[0].makefile('rb')
 		
 		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.client_socket.connect(('192.168.0.107', 1234))   #pi
+		self.client_socket.connect(('192.168.0.114', 1234))   #pi
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
