@@ -73,6 +73,22 @@ class RCKeras(object):
 		self.gkpTrain = self.orb.detect(self.gTrainGray,None)
 		self.gkpTrain, self.gdesTrain = self.orb.compute(self.gTrainGray, self.gkpTrain)
 
+	def ultrasonic(self):
+		try:
+            start = time.time()
+
+            while True:
+                sensor_data = float(self.connection2.recv(1024))
+                print("Distance: %0.1f cm" % sensor_data)
+                sensor_data = round(float(sensor_data), 1)
+                # test for 10 seconds
+                if time.time() - start > 10:
+                    break
+
+                return sensor_data
+        finally:
+            self.connection.close()
+            self.server_socket.close()
 		
 	def drive(self):
 		global sensor_data
@@ -83,10 +99,8 @@ class RCKeras(object):
 			start = time.time()
 			# stream video frames one by one
 			while True:
-				buf = self.connection2.recv(1024)
-				sensor_data = round(float(buf), 1)
-				print("Distance: %0.1f cm" % sensor_data)
-
+				sensor_data = self.ultrasonic()
+				
 				stream_bytes += self.connection.read(1024)
 				first = stream_bytes.find(b'\xff\xd8')
 				last = stream_bytes.find(b'\xff\xd9')
