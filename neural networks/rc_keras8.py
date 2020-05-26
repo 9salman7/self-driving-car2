@@ -74,26 +74,22 @@ class RCKeras(object):
 		self.gkpTrain, self.gdesTrain = self.orb.compute(self.gTrainGray, self.gkpTrain)
 
 	def ultrasonic(self):
-		try:
-			start = time.time()
-
-			while True:
-				sep = ' '
-				buf = b''
-				while sep not in buf:
-					buf += self.connection2.recv(1024)
-				
-				sensor_data = int(buf)
-				print("Distance: %0.1f cm" % sensor_data)
-				# test for 10 seconds
-				if time.time() - start > 10:
-					break
-
-				return sensor_data
-		finally:
-			self.connection.close()
-			self.server_socket.close()
 		
+		start = time.time()
+
+		while True:
+			sep = ' '
+			buf = b''
+			buf = self.connection2.recv(1024)
+			
+			sensor_data = float(buf)
+			#print("Distance: %0.1f cm" % sensor_data)
+			# test for 10 seconds
+			if time.time() - start > 10:
+				break
+
+			return sensor_data
+	
 	def drive(self):
 		global sensor_data
 		stop_flag = False
@@ -103,7 +99,7 @@ class RCKeras(object):
 			start = time.time()
 			# stream video frames one by one
 			while True:
-				sensor_data = self.ultrasonic()
+				
 				
 				stream_bytes += self.connection.read(1024)
 				first = stream_bytes.find(b'\xff\xd8')
@@ -114,6 +110,7 @@ class RCKeras(object):
 					stream_bytes = stream_bytes[last + 2:]
 					gray = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
 					image = cv2.imdecode(np.frombuffer(jpg, dtype=np.uint8), cv2.IMREAD_COLOR)
+					#print('hi')
 
 					# lower half of the image
 					height, width = gray.shape
@@ -121,10 +118,9 @@ class RCKeras(object):
 					#print("Image loaded")
 					
 					#frame= cv2.resize(image, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-
 					# object detection
 					v_param1 = self.detect(self.stop_cascade, gray, image)
-			
+					
 					# distance measurement
 					if v_param1 > 0:
 						d1 = self.calculate(v_param1, self.h1, 300, image)
@@ -133,7 +129,8 @@ class RCKeras(object):
 					cv2.imshow('RPi Camera Stream', image)
 					cv2.waitKey(1)
 					cv2.imwrite("camera.jpg", image)
-
+					#print('hi2')
+					sensor_data = self.ultrasonic()
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
 
