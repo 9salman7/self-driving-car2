@@ -75,24 +75,24 @@ class RCKeras(object):
 
 	def ultrasonic(self):
 		try:
-            start = time.time()
+			start = time.time()
 
-            while True:
-            	sep = ' '
-            	buf = b''
-            	while sep not in buf:
-            		buf += self.connection2.recv(1024)
-                
-            	sensor_data = int(buf)
-                print("Distance: %0.1f cm" % sensor_data)
-                # test for 10 seconds
-                if time.time() - start > 10:
-                    break
+			while True:
+				sep = ' '
+				buf = b''
+				while sep not in buf:
+					buf += self.connection2.recv(1024)
+				
+				sensor_data = int(buf)
+				print("Distance: %0.1f cm" % sensor_data)
+				# test for 10 seconds
+				if time.time() - start > 10:
+					break
 
-                return sensor_data
-        finally:
-            self.connection.close()
-            self.server_socket.close()
+				return sensor_data
+		finally:
+			self.connection.close()
+			self.server_socket.close()
 		
 	def drive(self):
 		global sensor_data

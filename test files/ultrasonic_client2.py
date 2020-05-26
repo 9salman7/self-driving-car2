@@ -49,6 +49,7 @@ try:
     while True:
         distance = measure()
         print "Distance : %.1f cm" % distance
+        d = str(distance)
         d = distance + ' '
         d = d.encode('utf-8')
         client_socket.send(d)
