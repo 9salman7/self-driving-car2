@@ -169,6 +169,7 @@ class RCKeras(object):
 						sensor_data = None
 					
 					elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
+						cv2.putText(image, "Obstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
 						f = open("status.txt", "w")
 						f.write("Stop sign ahead")
 						f.close()	

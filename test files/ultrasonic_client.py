@@ -45,13 +45,13 @@ GPIO.setup(GPIO_ECHO,GPIO.IN)
 GPIO.output(GPIO_TRIGGER, False)
 
 try:
-    time.sleep(2)
+    #time.sleep(2)
     while True:
         distance = measure()
         print "Distance : %.1f cm" % distance
         # send data to the host every 0.5 sec
         client_socket.send(str(distance).encode('utf-8'))
-        time.sleep(0.5)
+        #time.sleep(0.5)
 finally:
     client_socket.close()
     GPIO.cleanup()
