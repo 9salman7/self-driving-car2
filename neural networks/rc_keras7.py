@@ -73,6 +73,7 @@ class RCKeras(object):
 		self.gkpTrain = self.orb.detect(self.gTrainGray,None)
 		self.gkpTrain, self.gdesTrain = self.orb.compute(self.gTrainGray, self.gkpTrain)
 
+		
 	def drive(self):
 		global sensor_data
 		stop_flag = False
@@ -82,8 +83,11 @@ class RCKeras(object):
 			start = time.time()
 			# stream video frames one by one
 			while True:
-				sensor_data = float(self.connection2.recv(1024))
-				sensor_data = round((sensor_data), 1)
+				sep = ' '
+				buf = b''
+				while sep not in buf:
+					buf+= self.connection2.recv(1024)
+				sensor_data = round(float(buf), 1)
 				print("Distance: %0.1f cm" % sensor_data)
 
 				stream_bytes += self.connection.read(1024)

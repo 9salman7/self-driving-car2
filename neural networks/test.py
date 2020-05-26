@@ -43,7 +43,7 @@ class VideoStreamHandler(socketserver.StreamRequestHandler):
      # hard coded thresholds for stopping, sensor 30cm, other two 25cm
     d_sensor_thresh = 30
     d_stop_light_thresh = 70
-    d_stop_sign = self.d_stop_light_thresh
+    d_stop_sign = d_stop_light_thresh
     
     stop_start = 0  # start time when stop at the stop sign
     stop_finish = 0
