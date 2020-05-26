@@ -45,6 +45,7 @@ GPIO.setup(GPIO_ECHO,GPIO.IN)
 GPIO.output(GPIO_TRIGGER, False)
 
 try:
+    time.sleep(2)
     while True:
         distance = measure()
         print "Distance : %.1f cm" % distance
