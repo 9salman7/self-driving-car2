@@ -11,12 +11,8 @@ import time
 sensor_data = None
 
 class RCKeras(object):
-	def __init__(self):
-		self.inst = None
-
-	def create(self, host, port, model_path):
-
-		self.server_socket = socket.socket()
+	def __init__(self, host, port):
+		self.server_socket = socket.socket()    		     #connecting to pi camera stream
 		self.server_socket.bind((host, port))
 		self.server_socket.listen(0)
 
@@ -24,11 +20,11 @@ class RCKeras(object):
 		self.connection = self.server_socket.accept()[0].makefile('rb')
 		
 		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.client_socket.connect(('192.168.0.114', 1234))   #pi for camera
+		self.client_socket.connect(('192.168.0.114', 1234))   #pi ip for sending data
 
 		self.server_socket2 = socket.socket()
 		self.server_socket2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-		self.server_socket2.bind(("192.168.0.114", 4321))	  #pi for ultrasonic sensor
+		self.server_socket2.bind((host, 4321))	  		  #connecting to pi for ultrasonic sensor
 		self.server_socket2.listen(0)
 		self.connection2, self.client_address2 = self.server_socket2.accept()
 		
@@ -287,8 +283,7 @@ if __name__ == '__main__':
 	# model path
 	path = "model_test.h5"
   
-	rc = RCKeras()
-	rc.create(h, p, path)
+	rc = RCKeras(h, p)
 	rc.drive()
 
 
