@@ -7,6 +7,7 @@ import socketserver
 import numpy as np
 import math
 import time
+import socket
 
 from model import NeuralNetwork
 
@@ -26,9 +27,8 @@ class SensorDataHandler(socketserver.BaseRequestHandler):
             print("Distance: ",sensor_data)
 
 class VideoStreamHandler(socketserver.StreamRequestHandler):
-    
-    self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    self.client_socket.connect(('192.168.0.114', 1234))   #pi ip for sending data
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(('192.168.0.114', 1234))   #pi ip for sending data
 
     self.h1 = 5.5  # cm
 
