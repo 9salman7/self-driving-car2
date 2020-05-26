@@ -27,35 +27,36 @@ class SensorDataHandler(socketserver.BaseRequestHandler):
             print("Distance: ",sensor_data)
 
 class VideoStreamHandler(socketserver.StreamRequestHandler):
+    
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(('192.168.0.114', 1234))   #pi ip for sending data
 
-    self.h1 = 5.5  # cm
+    h1 = 5.5  # cm
 
     # load trained neural network
-    self.nn = NeuralNetwork()
-    self.nn.load_modelKeras("model_test.h5")
+    nn = NeuralNetwork()
+    nn.load_modelKeras("model_test.h5")
 
     # cascade classifiers
-    self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"stop_sign.xml")
+    stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"stop_sign.xml")
     
      # hard coded thresholds for stopping, sensor 30cm, other two 25cm
-    self.d_sensor_thresh = 30
-    self.d_stop_light_thresh = 70
-    self.d_stop_sign = self.d_stop_light_thresh
+    d_sensor_thresh = 30
+    d_stop_light_thresh = 70
+    d_stop_sign = self.d_stop_light_thresh
     
-    self.stop_start = 0  # start time when stop at the stop sign
-    self.stop_finish = 0
-    self.stop_time = 0
-    self.drive_time_after_stop = 0
+    stop_start = 0  # start time when stop at the stop sign
+    stop_finish = 0
+    stop_time = 0
+    drive_time_after_stop = 0
 
-    self.red_light = False
-    self.green_light = False
-    self.yellow_light = False
+    red_light = False
+    green_light = False
+    yellow_light = False
 
-    self.alpha = 8.0 * math.pi / 180    # degree measured manually
-    self.v0 = 119.865631204             # from camera matrix
-    self.ay = 332.262498472             # from camera matrix
+    alpha = 8.0 * math.pi / 180    # degree measured manually
+    v0 = 119.865631204             # from camera matrix
+    ay = 332.262498472             # from camera matrix
 
     def handle(self):
         global sensor_data
