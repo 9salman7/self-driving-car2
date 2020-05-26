@@ -83,10 +83,7 @@ class RCKeras(object):
 			start = time.time()
 			# stream video frames one by one
 			while True:
-				sep = ' '
-				buf = b''
-				while sep not in buf:
-					buf+= self.connection2.recv(1024)
+				buf = self.connection2.recv(1024)
 				sensor_data = round(float(buf), 1)
 				print("Distance: %0.1f cm" % sensor_data)
 
