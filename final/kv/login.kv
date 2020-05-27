@@ -1,0 +1,96 @@
+#:kivy 1.11.1
+<LoginScreen@Screen>:
+	name: "login_screen"
+	on_enter:
+		app.animate_background(lla)
+		app.animate_card(box_card)
+	LoginLayout:
+		id: lla
+	MDCard:
+		id: box_card
+		orientation: "vertical"
+		size_hint: [0.8, 0.65]
+		pos_hint: {"center_x": 0.5, "center_y": 0}
+		
+		BoxLayout:
+			padding: [15, 0, 15, 0]
+			orientation: "vertical"
+			MDLabel:
+				text: "Welcome to Infernus"
+				text_size: self.size
+				font_size: 35
+				bold: True
+				halign: 'center'
+				valign: 'middle'
+	
+			MDLabel:
+				text: "Sign in to get started"
+				halign: "center"
+				valign: "middle"
+				bold: True
+				color: utils.get_color_from_hex("#006233")
+		
+		MDTextField:
+			id: usr
+			hint_text: "Username"
+			# padding_x:[10,0]
+			size_hint_x: 0.8
+			pos_hint: {"center_x": 0.5}
+		MDTextField:
+			id: passwd
+			hint_text: "Password"
+			# helper_text: "Password"
+			size_hint_x: 0.8
+			pos_hint: {"center_x": 0.5}
+			password: True
+		BoxLayout:
+			orientation: "vertical"
+			MDFillRoundFlatButton:
+				text: "Sign In"
+				bold: True
+				size_hint_x: 0.8
+				pos_hint: {"center_x": .5}
+				on_release:
+					app.login(usr, passwd)
+			MDRectangleFlatButton:
+				text: "Explore The Future of Mobility"
+				pos_hint: {"center_x": .5}
+				on_release:
+					app.manage_screens("explore_screen", "add")
+					app.change_screen("explore_screen")
+
+<LoginLayout@BoxLayout>:
+	orientation: "vertical"
+	
+	BoxLayout:
+		id: bx
+		orientation: "vertical"
+		size_hint_y: 0.1
+		canvas.before:
+			Color:
+				rgba: utils.get_color_from_hex("#eb4034")
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [0, 0, 30, 30]
+	BoxLayout:
+		orientation: "horizontal"
+		padding: [45,0,0,0]
+		Widget:
+			canvas.before:
+				Color:
+					rgba: utils.get_color_from_hex("#eb0f00")
+				Ellipse:
+					pos: self.pos
+		Widget:
+			canvas.before:
+				Color:
+					rgba: utils.get_color_from_hex("#eb4034")
+				Ellipse:
+					pos: self.pos
+		Widget:
+			canvas.before:
+				Color:
+					rgba: utils.get_color_from_hex("#ff8a82")
+				Ellipse:
+					pos: self.pos

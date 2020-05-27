@@ -1,0 +1,103 @@
+#:kivy 1.11.1
+<ExploreScreen>:
+    on_enter:
+        Snackbar(text="Impressive!").show()
+    
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_y: 0.1
+        pos_hint: {"top":1}
+        canvas.before:
+            Color:
+                rgba: utils.get_color_from_hex("#eb4034")
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [0, 0, 30, 30]
+    BoxLayout:
+        orientation: "vertical"
+        
+        BoxLayout:
+            orientation: "vertical"
+            BoxLayout:
+                size_hint_y: 0.1
+                orientation: "horizontal"
+                BoxLayout:
+                    orientation: "horizontal"
+                    MDIconButton:
+                        icon: 'home'
+                        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                        on_release:
+                            app.manage_screens(root.name, "remove")
+                            app.change_screen("login_screen")
+                    MDLabel:
+                        text: "Explore Infernus"
+                        font_style: "H5"
+                        bold: True
+                        theme_text_color: 'Custom'
+                        valign: "center"
+                        halign: "center"
+                        text_color: (1, 1, 1, 1) if app.theme_cls.theme_style == "Dark" else (0, 0, 0, 1)
+                MDIconButton:
+                    icon: "home"
+                    pos_hint: {"center_y": 0.5}
+                    on_release:
+                        app.manage_screens(root.name, "remove")
+                        app.change_screen("login_screen")
+
+        MDCard:
+            orientation: "vertical"
+            padding: "8dp"
+            size_hint: None, None
+            size: "280dp", "180dp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDLabel:
+                text: "Road Lane Detection"
+                theme_text_color: "Secondary"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDSeparator:
+                height: "1dp"
+
+            MDLabel:
+                text: "An artifical neural network built on the Tensorflow backend helps the car predict what direction to take"
+
+        MDCard:
+            orientation: "vertical"
+            padding: "8dp"
+            size_hint: None, None
+            size: "280dp", "180dp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDLabel:
+                text: "Sign Detection"
+                theme_text_color: "Secondary"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDSeparator:
+                height: "1dp"
+
+            MDLabel:
+                text: "A Haar cascade model built using OpenCV is used by the car to identify road signs and traffic signals"        
+
+        MDCard:
+            orientation: "vertical"
+            padding: "8dp"
+            size_hint: None, None
+            size: "280dp", "180dp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDLabel:
+                text: "Desktop and Mobile App"
+                theme_text_color: "Secondary"
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDSeparator:
+                height: "1dp"
+
+            MDLabel:
+                text: "An interactive application built using Python can be used by the user for a graphical interface" 

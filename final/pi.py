@@ -56,9 +56,12 @@ class RCControl(object):
 				
 				prediction = str(buf)
 				distance = self.measure()
-				print(distance)
+				#print(distance)
 				
 				if distance > 30.0 :
+					f = open("obstacle.txt", "w")
+					f.write("No obstacle ahead")
+					f.close()
 					if prediction == "2 ":
 						print("Forward")
 						wiringpi.digitalWrite(21, 0)
@@ -105,8 +108,11 @@ class RCControl(object):
 						GPIO.output(4, GPIO.HIGH)
 
 				else:
+					f = open("obstacle.txt", "w")
+					f.write("Obstacle ahead!")
+					f.close()
 					self.stop()
-					print("Obstacle ahead!")
+					print("Obstacle ahead! Distance: ", distance)
 					
 		finally:
 			#self.connection.close()

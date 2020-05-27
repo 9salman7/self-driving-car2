@@ -79,8 +79,17 @@ class RCDriverNNOnly(object):
 
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
+
+					f = open("obstacle.txt", "r")
+					obstacle = f.read()
+					if obstacle == "Obstacle ahead!":
+						cv2.putText(image, "Warning, bbstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+
 					
 					if 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
+						f = open("status.txt", "w")
+						f.write("Stop sign ahead")
+						f.close()	
 						print("Stop sign ahead")
 						label = "3"
 						self.sendPrediction(label)
@@ -97,6 +106,9 @@ class RCDriverNNOnly(object):
 
 						# 5 seconds later, continue driving
 						if self.stop_time > 5:
+							f = open("status.txt", "w")
+							f.write("Waited for 5 seconds")
+							f.close()
 							print("Waited for 5 seconds")
 							stop_flag = False
 							stop_sign_active = False
@@ -128,6 +140,19 @@ class RCDriverNNOnly(object):
 			self.server_socket.close()
 
 	def sendPrediction(self, pred):
+		if pred == "0":
+			f = open("status.txt", "w")
+			f.write("Car moving left")
+			f.close()
+		elif pred == "1":
+			f = open("status.txt", "w")
+			f.write("Car moving right")
+			f.close()
+		elif pred == "2":
+			f = open("status.txt", "w")
+			f.write("Car moving forward")
+			f.close()		
+
 		p=pred+ ' '
 		p = p.encode('utf-8')
 		self.client_socket.send(p)

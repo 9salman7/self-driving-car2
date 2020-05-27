@@ -1,0 +1,349 @@
+#:kivy 1.11.1
+<HomeScreen>:
+    name: "home_screen"
+    on_enter:
+        img=root.build()
+
+    MDToolbar:
+        id: toolbar
+        title: "Test MDBottomNavigation"
+        md_bg_color: app.theme_cls.primary_color
+        left_action_items: [["menu", lambda x: None]]
+
+    MDBottomNavigation:
+        id: panel
+
+        MDBottomNavigationItem:
+            name: "home"
+            text: "Home"
+            icon: "home-variant"
+
+            MDCard:
+                orientation: "vertical"
+                padding: "4dp"
+                size_hint: None, None
+                size: "350dp", "350dp"
+                pos_hint: {"center_x": .5, "center_y": .65}
+
+                MDLabel:
+                    text: "Camera Stream"
+                    theme_text_color: "Primary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: "center"
+
+
+                MDSeparator:
+                    height: "1dp"
+
+                #MDLabel:
+                #    text: "Pi Camera Stream"
+                Image:
+                    id: vid
+                    source: "camera.jpg"
+
+            BoxLayout:
+                orientation: "vertical"
+                MDFillRoundFlatButton:
+                    id: obst
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                MDRoundFlatButton:
+                    id: stat       
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                MDFillRoundFlatButton:
+                    text: "Start Car"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        root.carControl("start")
+                MDRoundFlatButton:
+                    text: "Stop Car"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        root.carControl("stop")
+                MDFillRoundFlatButton:
+                    text: "Speech Recognition"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        root.speechRec()
+                MDRoundFlatButton:
+                    text: "Exit"
+                    bold: True
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": .5}
+                    on_release:
+                        app.manage_screens("login_screen", "add")
+                        app.change_screen("login_screen")
+
+        MDBottomNavigationItem:
+            name: "team"
+            text: "Team"
+            icon: "account"
+
+            BoxLayout:
+                orientation: "vertical"
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Mohamed Salman"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        halign: "center"
+
+                    MDSeparator:
+                        height: "1dp"
+
+                    Image:
+                        source: "images/salman.jpg"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "R Manoj"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        halign: "center"
+
+                    MDSeparator:
+                        height: "1dp"
+
+                    #MDLabel:
+                    #    text: "Pi Camera Stream"
+                    Image:
+                        source: "images/manoj.jpeg"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Rudresh M"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        halign: "center"
+
+                    MDSeparator:
+                        height: "1dp"
+
+                    #MDLabel:
+                    #    text: "Pi Camera Stream"
+                    Image:
+                        source: "images/rudresh.jpeg"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Mohamed Jaffar"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        halign: "center"
+
+                    MDSeparator:
+                        height: "1dp"
+
+                    #MDLabel:
+                    #    text: "Pi Camera Stream"
+                    Image:
+                        source: "images/jaffar.jpeg"
+
+        MDBottomNavigationItem:
+            name: "specs"
+            text: "Specs"
+            icon: "settings"
+
+            BoxLayout:
+                orientation: "vertical"
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Computer: Raspberry Pi 4"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Camera: Raspberry Pi Camera v2"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                      
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Microcontroller: Arduino Uno"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Ultrasonic Sensor: HCSR04"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Motor Bridge: L298N"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Operating Systems: Raspbian OS, Windows 10/Linux"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Image Processing: OpenCV Python"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Neural Network Backend: Tensorflow"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Application UI: Kivy"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "Battery: 2x 10500mAh Power Banks"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+                
+
