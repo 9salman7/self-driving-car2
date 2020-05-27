@@ -56,6 +56,7 @@ class RCControl(object):
 				
 				prediction = str(buf)
 				distance = measure()
+				print(distance)
 				
 				if distance > 30.0 :
 					if prediction == "2 ":
