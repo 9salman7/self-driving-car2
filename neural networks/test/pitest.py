@@ -55,7 +55,7 @@ class RCControl(object):
 					buf+=self.connection.recv(1024)
 				
 				prediction = str(buf)
-				distance = measure()
+				distance = self.measure()
 				print(distance)
 				
 				if distance > 30.0 :
