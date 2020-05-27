@@ -25,10 +25,10 @@ class SplitFrames(object):
                 self.stream.seek(0)
         self.stream.write(buf)
 
-my_server = '192.168.1.100'
-res = (320, 240)
+my_server = '192.168.0.103'
+res = (360, 240)
 client_socket = socket.socket()
-client_socket.connect((my_server, 8000))
+client_socket.connect((my_server, 1234))
 connection = client_socket.makefile('wb')
 try:
     output = SplitFrames(connection)
