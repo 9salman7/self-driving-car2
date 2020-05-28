@@ -9,7 +9,7 @@
 	MDCard:
 		id: box_card
 		orientation: "vertical"
-		size_hint: [0.8, 0.65]
+		size_hint: [0.8, 0.75]
 		pos_hint: {"center_x": 0.5, "center_y": 0}
 		
 		BoxLayout:
@@ -22,13 +22,14 @@
 				bold: True
 				halign: 'center'
 				valign: 'middle'
+				color: utils.get_color_from_hex("#ffffff")
 	
 			MDLabel:
 				text: "Sign in to get started"
 				halign: "center"
 				valign: "middle"
 				bold: True
-				color: utils.get_color_from_hex("#006233")
+				color: utils.get_color_from_hex("#66ff63")
 		
 		MDTextField:
 			id: usr
@@ -58,6 +59,20 @@
 				on_release:
 					app.manage_screens("explore_screen", "add")
 					app.change_screen("explore_screen")
+
+			MDLabel:
+				text: "[ref=some][u]Check out the repository![/u][/ref]"
+				markup: True
+				halign: "center"
+				valign: "middle"
+				bold: True
+				color: utils.get_color_from_hex("#52cbff")
+				on_ref_press:
+                    import webbrowser
+                    webbrowser.open('http://github.com/9salman7/self-driving-car2')
+
+        Image:
+            source: "images/car.jpg"
 
 <LoginLayout@BoxLayout>:
 	orientation: "vertical"

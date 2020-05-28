@@ -20,21 +20,29 @@
 
             MDCard:
                 orientation: "vertical"
-                padding: "4dp"
+                padding: "1dp"
                 size_hint: None, None
-                size: "350dp", "350dp"
-                pos_hint: {"center_x": .5, "center_y": .65}
-
+                size: "320dp", "320dp"
+                pos_hint: {"center_x": .5, "center_y": .7}
                 MDLabel:
-                    text: "Camera Stream"
+                    text: "  "
+                    bold: True
                     theme_text_color: "Primary"
                     size_hint_y: None
                     height: self.texture_size[1]
                     halign: "center"
+   
+                MDLabel:
+                    text: "Camera Stream"
+                    bold: True
+                    theme_text_color: "Primary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: "center"
+                    font_style: "H5"
 
-
-                MDSeparator:
-                    height: "1dp"
+                #MDSeparator:
+                #    height: "1dp"
 
                 #MDLabel:
                 #    text: "Pi Camera Stream"
@@ -44,16 +52,26 @@
 
             BoxLayout:
                 orientation: "vertical"
-                MDFillRoundFlatButton:
+                pos_hint: {"center_x": .5, "center_y": .55}
+
+                MDLabel:
                     id: obst
                     bold: True
-                    size_hint_x: 0.8
-                    pos_hint: {"center_x": .5}
-                MDRoundFlatButton:
-                    id: stat       
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: "center"
+                    font_style: "H5"
+                    color: utils.get_color_from_hex("#e01616")
+
+                MDLabel:
+                    id: stat
                     bold: True
-                    size_hint_x: 0.8
-                    pos_hint: {"center_x": .5}
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: "center"
+                    font_style: "H5"
+                    color: utils.get_color_from_hex("#0000EE")
+                   
                 MDFillRoundFlatButton:
                     text: "Start Car"
                     bold: True
@@ -90,6 +108,7 @@
             icon: "account"
 
             BoxLayout:
+
                 orientation: "vertical"
                 MDCard:
                     orientation: "vertical"
@@ -342,6 +361,26 @@
                         theme_text_color: "Primary"
                         size_hint_y: None
                         height: self.texture_size[1]
+
+                    MDSeparator:
+                        height: "1dp"
+
+                MDCard:
+                    orientation: "vertical"
+                    padding: "8dp"
+                    size_hint: 1, 0.25
+                    size: "280dp", "180dp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+
+                    MDLabel:
+                        text: "[ref=some][u]GitHub repository[/u][/ref]"
+                        theme_text_color: "Primary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        markup: True
+                        on_ref_press:
+                            import webbrowser
+                            webbrowser.open('http://github.com/9salman/self-driving-car2')
 
                     MDSeparator:
                         height: "1dp"

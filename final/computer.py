@@ -80,8 +80,8 @@ class RCDriverNNOnly(object):
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
 
-					f = open("obstacle.txt", "r")
-					obstacle = f.read()
+					g = open("obstacle.txt", "r")
+					obstacle = g.read()
 					if obstacle == "Obstacle ahead!":
 						cv2.putText(image, "Warning, bbstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
 

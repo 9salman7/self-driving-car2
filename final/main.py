@@ -95,7 +95,7 @@ class HomeScreen(Screen):
             self.greenFlag = False
 
         self.ids.vid.reload()
-
+       
         self.ids.stat.text = self.status
         self.ids.obst.text = self.obstacle
         # display image from cam in opencv window
@@ -134,7 +134,7 @@ class Car(MDApp):
         self.has_animated_background = False
         
     def login(self, usr, passwd):
-        if(usr.text=="salman97" and passwd.text=="salman"):
+        if(usr.text=="" and passwd.text==""):
             #Snackbar(text="Welcome " + usr.text + "!").show()
             toast("Welcome " + usr.text + "!")
             self.manage_screens("home_screen", "add")
@@ -152,7 +152,7 @@ class Car(MDApp):
     def animate_card(self, widget):
         # {"center_x": 0.5, "center_y": 0.6}
         if self.has_animated_card == False:
-            anim = Animation(pos_hint={"center_x": 0.5, "center_y": 0.6}, duration=0.5)
+            anim = Animation(pos_hint={"center_x": 0.5, "center_y": 0.6}, duration=1.5)
             anim.start(widget)
             self.has_animated_card = True
            
@@ -192,6 +192,7 @@ class Car(MDApp):
         pass
 
     def build(self):
+        self.theme_cls.theme_style = "Dark"
         self.bind(on_start=self.post_build_init)
         self.sm.add_widget(Factory.LoginScreen())
         self.sm.add_widget(Factory.HomeScreen())
