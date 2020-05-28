@@ -41,6 +41,25 @@ class RCDriverNNOnly(object):
 		self.v0 = 119.865631204             # from camera matrix
 		self.ay = 332.262498472             # from camera matrix
 
+		self.red_light = False
+		self.green_light = False
+		self.yellow_light = False
+
+		self.orb = cv2.ORB_create(nfeatures=1500)
+		self.bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+
+		self.rTrainColor=cv2.imread('detection/red.jpg') 
+		self.rTrainGray = cv2.cvtColor(self.rTrainColor, cv2.COLOR_BGR2GRAY)
+
+		self.gTrainColor=cv2.imread('detection/green.jpg') 
+		self.gTrainGray = cv2.cvtColor(self.gTrainColor, cv2.COLOR_BGR2GRAY)
+
+		self.rkpTrain = self.orb.detect(self.rTrainGray,None)
+		self.rkpTrain, self.rdesTrain = self.orb.compute(self.rTrainGray, self.rkpTrain)
+
+		self.gkpTrain = self.orb.detect(self.gTrainGray,None)
+		self.gkpTrain, self.gdesTrain = self.orb.compute(self.gTrainGray, self.gkpTrain)
+
 	def drive(self):
 		stop_flag = False
 		stop_sign_active = True
@@ -80,13 +99,38 @@ class RCDriverNNOnly(object):
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
 
+					#traffic light detection
+					kpCam = self.orb.detect(gray,None)
+					kpCam, desCam = self.orb.compute(gray, kpCam)
+
+					rmatches = self.bf.match(desCam, self.rdesTrain)
+					rdist = [rm.distance for rm in rmatches]
+					rthres_dist = (sum(rdist) / len(rdist)) * 0.5
+					rmatches = [rm for rm in rmatches if rm.distance < rthres_dist]
+
+					gmatches = self.bf.match(desCam, self.gdesTrain)
+					gdist = [gm.distance for gm in gmatches]
+					gthres_dist = (sum(gdist) / len(gdist)) * 0.5
+					gmatches = [gm for gm in gmatches if gm.distance < gthres_dist]
+
+					if len(rmatches)>4 or len(gmatches)>4:
+						if len(rmatches)>len(gmatches) and self.red_light == False:
+							print("Red light ahead")
+							self.red_light = True
+							self.green_light = False
+							
+						elif len(rmatches)<len(gmatches) and self.green_light == False:
+							print("Green light ahead")
+							self.red_light = False
+							self.green_light = True
+
 					g = open("obstacle.txt", "r")
 					obstacle = g.read()
 					if obstacle == "Obstacle ahead!":
 						cv2.putText(image, "Warning, obstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
 
 					
-					if 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
+					elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
 						f = open("status.txt", "w")
 						f.write("Stop sign ahead")
 						f.close()	
@@ -112,6 +156,22 @@ class RCDriverNNOnly(object):
 							print("Waited for 5 seconds")
 							stop_flag = False
 							stop_sign_active = False
+
+					elif self.red_light == True or self.green_light == True:
+						# print("Traffic light ahead")
+						if self.red_light == True:
+							f = open("status.txt", "w")
+							f.write("Red light ahead")
+							f.close()
+							cv2.putText(image, "Red Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+							label = "3"
+							self.sendPrediction(label)
+						elif self.green_light == True:
+							f = open("status.txt", "w")
+							f.write("Green light ahead")
+							f.close()
+							cv2.putText(image, "Green Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2, cv2.LINE_AA)
+							pass
 
 					else:
 						# neural network makes prediction                   
