@@ -43,7 +43,7 @@ class RCDriverNNOnly(object):
 		self.ay = 332.262498472             # from camera matrix
 
 		self.server_socket2 = socket.socket()
-		self.server_socket2.bind(('192.168.0.103', 1234))    #computer
+		self.server_socket2.bind(('192.168.0.103', 5678))    #computer
 		self.server_socket2.listen(0)
 		self.connection2 = self.server_socket2.accept()[0]
 
