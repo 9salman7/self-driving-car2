@@ -29,7 +29,7 @@ class RCDriverNNOnly(object):
 		#self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"D:/Downloads/self-driving-car2/neural networks/stop_sign.xml")
 		self.stop_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +"stop_sign.xml")
 
-		self.d_stop_light_thresh = 70
+		self.d_stop_light_thresh = 130
 		self.d_stop_sign = self.d_stop_light_thresh    
 		
 		self.stop_start = 0  # start time when stop at the stop sign
@@ -45,13 +45,13 @@ class RCDriverNNOnly(object):
 		self.green_light = False
 		self.yellow_light = False
 
-		self.orb = cv2.ORB_create(nfeatures=1500)
+		self.orb = cv2.ORB_create(nfeatures=3000)
 		self.bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
 
-		self.rTrainColor=cv2.imread('detection/red.jpg') 
+		self.rTrainColor=cv2.imread('detection/rednew.jpg') 
 		self.rTrainGray = cv2.cvtColor(self.rTrainColor, cv2.COLOR_BGR2GRAY)
 
-		self.gTrainColor=cv2.imread('detection/green.jpg') 
+		self.gTrainColor=cv2.imread('detection/greennew.jpg') 
 		self.gTrainGray = cv2.cvtColor(self.gTrainColor, cv2.COLOR_BGR2GRAY)
 
 		self.rkpTrain = self.orb.detect(self.rTrainGray,None)
@@ -113,7 +113,10 @@ class RCDriverNNOnly(object):
 					gthres_dist = (sum(gdist) / len(gdist)) * 0.5
 					gmatches = [gm for gm in gmatches if gm.distance < gthres_dist]
 
-					if len(rmatches)>4 or len(gmatches)>4:
+					# print(len(rmatches))
+					#print(len(gmatches))
+
+					if len(rmatches)>3 or len(gmatches)>3:
 						if len(rmatches)>len(gmatches) and self.red_light == False:
 							print("Red light ahead")
 							self.red_light = True

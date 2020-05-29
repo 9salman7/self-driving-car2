@@ -53,15 +53,16 @@ Builder.load_string("""
 class ExploreScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    
+class HomeScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.status = ""
         self.obstacle = ""
         self.stopFlag = False
         self.redFlag = False
         self.greenFlag = False
-    
-class HomeScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
     def build(self):
         #self.capture = cv2.VideoCapture(0)
