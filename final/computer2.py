@@ -124,13 +124,13 @@ class RCDriverNNOnly(object):
 							self.red_light = False
 							self.green_light = True
 
-					g = open("obstacle.txt", "r")
-					obstacle = g.read()
-					if obstacle == "Obstacle ahead!":
-						cv2.putText(image, "Warning, obstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+					# g = open("obstacle.txt", "r")
+					# obstacle = g.read()
+					# if obstacle == "Obstacle ahead!":
+					# 	cv2.putText(image, "Warning, obstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
 
 					
-					elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
+					if 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
 						f = open("status.txt", "w")
 						f.write("Stop sign ahead")
 						f.close()	
