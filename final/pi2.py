@@ -64,7 +64,7 @@ class RCControl(object):
 				if distance > 30.0 :
 					p="1"+ ' '
 					p = p.encode('utf-8')
-					self.client_socket.send(p)
+					self.client_socket.sendall(p)
 					if prediction == "2 ":
 						print("Forward")
 						wiringpi.digitalWrite(21, 0)
@@ -113,7 +113,7 @@ class RCControl(object):
 				else:
 					p="0"+ ' '
 					p = p.encode('utf-8')
-					self.client_socket.send(p)
+					self.client_socket.sendall(p)
 					self.stop()
 					print("Obstacle ahead! Distance: " + distance)
 					
