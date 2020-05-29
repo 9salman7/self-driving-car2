@@ -18,6 +18,7 @@ class RCDriverNNOnly(object):
 		
 		self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.client_socket.connect(('192.168.0.115', 1234))   #pi
+
 		
 		# load trained neural network
 		self.nn = NeuralNetwork()
@@ -40,6 +41,11 @@ class RCDriverNNOnly(object):
 		self.alpha = 8.0 * math.pi / 180    # degree measured manually
 		self.v0 = 119.865631204             # from camera matrix
 		self.ay = 332.262498472             # from camera matrix
+
+		self.server_socket2 = socket.socket()
+		self.server_socket2.bind(('192.168.0.103', 1234))    #computer
+		self.server_socket2.listen(0)
+		self.connection2 = self.server_socket2.accept()[0]
 
 	def drive(self):
 		stop_flag = False
@@ -80,60 +86,95 @@ class RCDriverNNOnly(object):
 					# reshape image
 					image_array = roi.reshape(1, int(height/2) * width).astype(np.float32)
 
-					g = open("obstacle.txt", "r")
-					obstacle = g.read()
-					if obstacle == "Obstacle ahead!":
-						cv2.putText(image, "Warning, obstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+					while(True):
+						sep = ' '
+						buf = b''
+						while sep not in buf:
+							buf+=self.connection2.recv(1024)
+						
+						obst = str(buf)
 
+
+						# g = open("obstacle.txt", "r")
+						# obstacle = g.read()
+						# if obstacle == "Obstacle ahead!":
+						# 	cv2.putText(image, "Warning, obstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+						if obst == "0 ":
+							g = open("obstacle.txt", "w")
+							g.write("Obstacle ahead")
+							g.close()
+							cv2.putText(image, "Obstacle ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+
+						elif obst == "1 ":
+							g = open("obstacle.txt", "w")
+							g.write("No obstacles ahead")
+							g.close()
+							cv2.putText(image, "No obstacles ahead" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2, cv2.LINE_AA)
 					
-					if 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
-						f = open("status.txt", "w")
-						f.write("Stop sign ahead")
-						f.close()	
-						print("Stop sign ahead")
-						label = "3"
-						self.sendPrediction(label)
-						#self.rc_car.stop()
-
-						# stop for 5 seconds
-						if stop_flag is False:
-							self.stop_start = cv2.getTickCount()
-							stop_flag = True
-						self.stop_finish = cv2.getTickCount()
-
-						self.stop_time = (self.stop_finish - self.stop_start) / cv2.getTickFrequency()
-						print("Stop time: %.2fs" % self.stop_time)
-
-						# 5 seconds later, continue driving
-						if self.stop_time > 5:
+						elif 0 < self.d_stop_sign < self.d_stop_light_thresh and stop_sign_active:
 							f = open("status.txt", "w")
-							f.write("Waited for 5 seconds")
-							f.close()
-							print("Waited for 5 seconds")
-							stop_flag = False
-							stop_sign_active = False
+							f.write("Stop sign ahead")
+							f.close()	
+							print("Stop sign ahead")
+							label = "3"
+							self.sendPrediction(label)
+							#self.rc_car.stop()
 
-					else:
-						# neural network makes prediction                   
-						self.prediction = self.nn.predictKeras(image_array)
-						#print("Keras prediction: ",self.prediction)
-						
-						label = self.prediction[0]
-						label = str(label)
-						self.sendPrediction(label)
+							# stop for 5 seconds
+							if stop_flag is False:
+								self.stop_start = cv2.getTickCount()
+								stop_flag = True
+							self.stop_finish = cv2.getTickCount()
 
-						self.stop_start = cv2.getTickCount()
-						self.d_stop_sign = self.d_stop_light_thresh
+							self.stop_time = (self.stop_finish - self.stop_start) / cv2.getTickFrequency()
+							print("Stop time: %.2fs" % self.stop_time)
 
-						if stop_sign_active is False:
-							self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
-							if self.drive_time_after_stop > 5:
-								stop_sign_active = True
-						
-					if cv2.waitKey(1) & 0xFF == ord('q'):
-						print("Car stopped")
-						self.sendPrediction("3")
-						break
+							# 5 seconds later, continue driving
+							if self.stop_time > 5:
+								f = open("status.txt", "w")
+								f.write("Waited for 5 seconds")
+								f.close()
+								print("Waited for 5 seconds")
+								stop_flag = False
+								stop_sign_active = False
+
+						elif self.red_light == True or self.green_light == True:
+							# print("Traffic light ahead")
+							if self.red_light == True:
+								f = open("status.txt", "w")
+								f.write("Red light ahead")
+								f.close()
+								cv2.putText(image, "Red Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2, cv2.LINE_AA)
+								label = "3"
+								self.sendPrediction(label)
+							elif self.green_light == True:
+								f = open("status.txt", "w")
+								f.write("Green light ahead")
+								f.close()
+								cv2.putText(image, "Green Light Ahead!" , (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2, cv2.LINE_AA)
+								pass
+
+						else:
+							# neural network makes prediction                   
+							self.prediction = self.nn.predictKeras(image_array)
+							#print("Keras prediction: ",self.prediction)
+							
+							label = self.prediction[0]
+							label = str(label)
+							self.sendPrediction(label)
+
+							self.stop_start = cv2.getTickCount()
+							self.d_stop_sign = self.d_stop_light_thresh
+
+							if stop_sign_active is False:
+								self.drive_time_after_stop = (self.stop_start - self.stop_finish) / cv2.getTickFrequency()
+								if self.drive_time_after_stop > 5:
+									stop_sign_active = True
+							
+						if cv2.waitKey(1) & 0xFF == ord('q'):
+							print("Car stopped")
+							self.sendPrediction("3")
+							break
 		finally:
 			cv2.destroyAllWindows()
 			self.connection.close()
