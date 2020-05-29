@@ -176,7 +176,7 @@ class RCDriverNNOnly(object):
 		cascade_obj = cascade_classifier.detectMultiScale(
 			gray_image,
 			scaleFactor=1.1,
-			minNeighbors=5,
+			minNeighbors=8,
 			minSize=(30, 30))
 
 		# draw a rectangle around the objects
